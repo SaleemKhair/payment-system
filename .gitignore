@@ -1,0 +1,34 @@
+.metadata
+bin/
+tmp/
+target/
+Servers/
+local.properties
+.settings/
+.sonarlint/
+RemoteSystemsTempFiles/
+.loadpath
+.recommenders
+
+# Eclipse Core
+.project
+
+# JDT-specific (Eclipse Java Development Tools)
+.classpath
+
+# sbteclipse plugin
+.target
+
+# STS (Spring Tool Suite)
+.springBeans
+
+# Code Recommenders
+.recommenders/
+
+*.class
+
+# Package Files #
+*.jar
+*.war
+*.ear
+

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-fragment xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:webfragment="http://java.sun.com/xml/ns/javaee/web-fragment_3_0.xsd"
+	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-fragment_3_1.xsd"
+	id="WebFragment_ID" metadata-complete="true" version="3.1">
+	<display-name>SubmitPayment</display-name>
+	<name>SubmitPayment</name>
+	<servlet>
+		<servlet-name>PaymentRequestServlet</servlet-name>
+		<servlet-class>com.progressoft.submitpayment.PaymentRequestServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>PaymentRequestServlet</servlet-name>
+		<url-pattern>/paymentRequest</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>CreateAccountServlet</servlet-name>
+		<servlet-class>com.progressoft.submitpayment.CreateAccountServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>CreateAccountServlet</servlet-name>
+		<url-pattern>/createAccount</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>PaymentRequestSubmitServlet</servlet-name>
+		<servlet-class>com.progressoft.submitpayment.PaymentRequestSubmitServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>PaymentRequestSubmitServlet</servlet-name>
+		<url-pattern>/submitpaymentrequest</url-pattern>
+	</servlet-mapping>
+
+
+	<servlet>
+		<servlet-name>AccountUpdateServlet</servlet-name>
+		<servlet-class>com.progressoft.submitpayment.AccountUpdateServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>AccountUpdateServlet</servlet-name>
+		<url-pattern>/updateAccount</url-pattern>
+	</servlet-mapping>
+
+</web-fragment>
