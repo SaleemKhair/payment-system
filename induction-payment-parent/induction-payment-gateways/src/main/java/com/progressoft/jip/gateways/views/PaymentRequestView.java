@@ -23,4 +23,8 @@ public interface PaymentRequestView {
 
 	String getAmountInWords();
 
+	String getPaymentStatus();
+
+	String getSubmissionState();
+
 }

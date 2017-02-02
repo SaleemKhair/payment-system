@@ -60,6 +60,7 @@ public class CurrencyJpaRepositoryImplTest {
 		settingsMap.put("javax.persistence.jdbc.password", "root");
 		settingsMap.put("javax.persistence.jdbc.url", "jdbc:mysql://localhost:3306/mockdata");
 		settingsMap.put("javax.persistence.jdbc.driver", "com.mysql.jdbc.Driver");
+		settingsMap.put("hibernate.hbm2ddl.auto", "update");
 		return settingsMap;
 	}
 

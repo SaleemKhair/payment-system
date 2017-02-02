@@ -49,4 +49,9 @@ public class PaymentRequestHandlerImpl implements PaymentRequestHandler {
 		paymentRequest.setAmountInWords(amountInWords);
 	}
 
+	@Override
+	public void setPaymentRequestStatus(PaymentRequest paymentRequest) {
+		paymentRequest.setPaymentStatus("created");
+	}
+
 }
