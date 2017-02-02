@@ -2,16 +2,17 @@ package com.progressoft.jip.utilities.chequewriting.impl;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.ArrayDeque;
 import java.util.Currency;
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
-import java.util.Stack;
 
 import com.progressoft.jip.utilities.chequewriting.ChequeAmountWriter;
 
 public class EnglishChequeAmountWriter implements ChequeAmountWriter {
-	private Stack<String> stack;
+	private Deque<String> deque;
 	private Map<Integer, String> postFixes = new HashMap<>();
 	private Map<Integer, String> currencyMap = new HashMap<>();
 	private Properties properties;
@@ -21,8 +22,10 @@ public class EnglishChequeAmountWriter implements ChequeAmountWriter {
 		properties = new Properties();
 		coinDictionary = new Properties();
 		try {
-			properties.load(EnglishChequeAmountWriter.class.getClassLoader().getResourceAsStream("com/progressoft/jip/utilities/Dictionaries/chequeWriterDictionary.properties"));
-			coinDictionary.load(EnglishChequeAmountWriter.class.getClassLoader().getResourceAsStream("com/progressoft/jip/utilities/Dictionaries/moneyChangeDictionary.properties"));
+			properties.load(EnglishChequeAmountWriter.class.getClassLoader().getResourceAsStream(
+					"com/progressoft/jip/utilities/Dictionaries/chequeWriterDictionary.properties"));
+			coinDictionary.load(EnglishChequeAmountWriter.class.getClassLoader().getResourceAsStream(
+					"com/progressoft/jip/utilities/Dictionaries/moneyChangeDictionary.properties"));
 		} catch (IOException e) {
 			throw new IllegalStateException(e);
 		}
@@ -39,40 +42,40 @@ public class EnglishChequeAmountWriter implements ChequeAmountWriter {
 		currencyMap.put(0, " " + currencyInstance.getDisplayName());
 		currencyMap.put(1, " " + coinDictionary.getProperty(currencyCode));
 		String[] numberIntegerAndDecimalParts = String.valueOf(amount).split("\\.");
-		String finalNumber = "";
+		StringBuilder finalNumber = new StringBuilder();
 		for (int i = 0; i < numberIntegerAndDecimalParts.length; ++i) {
 			Integer integer = Integer.parseInt(numberIntegerAndDecimalParts[i]);
-			finalNumber += format(integer);
+			finalNumber.append(format(integer));
 			if (!integer.equals(0)) {
-				finalNumber += currencyMap.get(i) + " ";
+				finalNumber.append(currencyMap.get(i) + " ");
 			}
 		}
-		return finalNumber;
+		return finalNumber.toString();
 	}
 
 	private String format(int number) {
-		stack = new Stack<>();
-		String res = "";
-		number = splitNumberIntoFamilies(number);
+		fillDeque(number);
+		StringBuilder res = new StringBuilder();
 		return processNumber(res);
 	}
 
-	private String processNumber(String res) {
-		while (!stack.isEmpty()) {
-			int numAsInteger = Integer.parseInt(stack.pop());
-			res += calc(numAsInteger);
-			if (numAsInteger != 0)
-				res += getPostfix(stack.size());
+	private void fillDeque(int number) {
+		deque = new ArrayDeque<>();
+		int splitted = number;
+		while (splitted > 0) {
+			deque.push(String.valueOf(splitted % 1000));
+			splitted /= 1000;
 		}
-		return res;
 	}
 
-	private int splitNumberIntoFamilies(int number) {
-		while (number > 0) {
-			stack.push(String.valueOf(number % 1000));
-			number /= 1000;
+	private String processNumber(StringBuilder res) {
+		while (!deque.isEmpty()) {
+			int numAsInteger = Integer.parseInt(deque.pop());
+			res.append(calc(numAsInteger));
+			if (numAsInteger != 0)
+				res.append(getPostfix(deque.size()));
 		}
-		return number;
+		return res.toString();
 	}
 
 	public String getPostfix(int i) {

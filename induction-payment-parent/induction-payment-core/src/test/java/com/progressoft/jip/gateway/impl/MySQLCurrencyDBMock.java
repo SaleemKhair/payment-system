@@ -11,6 +11,9 @@ import com.progressoft.jip.utilities.Constants;
 
 public class MySQLCurrencyDBMock {
 
+	private static final String INSERT_INTO_VALUES = "INSERT INTO ? VALUES(?,?,?)";
+	private static final String DELETE_DEL = "delete from ? where CODE = 'DEL'";
+	private static final String DELETE_CURRENCY_UPD = "delete from ? where CODE = 'UPD'";
 	public static final String UPDATED_CRNCY_CODE = "UPD";
 	public static final String DELETED_CRNCY_CODE = "DEL";
 
@@ -21,19 +24,18 @@ public class MySQLCurrencyDBMock {
 			insertCurrencyIntoTable(connection, UPDATED_CRNCY_CODE, "Update Currency", 0.4);
 
 		} catch (SQLException e) {
-			e.printStackTrace();
+			throw new IllegalStateException(e);
 		}
 	}
 
 	public static void tearDownDBEnviroment(BasicDataSource dataSource) {
-		try (Connection connection = dataSource.getConnection()) {
-			PreparedStatement statement = connection
-					.prepareStatement("delete from " + Constants.CRNCY_TABLE_NAME + " where CODE = 'UPD'");
+		try (Connection connection = dataSource.getConnection();
+				PreparedStatement statement = connection.prepareStatement(DELETE_CURRENCY_UPD);
+				PreparedStatement statement2 = connection.prepareStatement(DELETE_DEL)) {
+			statement.setString(1, Constants.CRNCY_TABLE_NAME);
+			statement2.setString(1, Constants.CRNCY_TABLE_NAME);
 			statement.executeUpdate();
-			PreparedStatement statement2 = connection
-					.prepareStatement("delete from " + Constants.CRNCY_TABLE_NAME + " where CODE = 'DEL'");
 			statement2.executeUpdate();
-
 		} catch (SQLException e) {
 			throw new IllegalStateException(e);
 		}
@@ -41,11 +43,11 @@ public class MySQLCurrencyDBMock {
 
 	private static void insertCurrencyIntoTable(Connection connection, String code, String name, double rate)
 			throws SQLException {
-		String sql = "INSERT INTO " + Constants.CRNCY_TABLE_NAME + " VALUES(?,?,?)";
-		try (PreparedStatement statement = connection.prepareStatement(sql)) {
-			statement.setString(1, code);
-			statement.setString(2, name);
-			statement.setDouble(3, rate);
+		try (PreparedStatement statement = connection.prepareStatement(INSERT_INTO_VALUES)) {
+			statement.setString(1, Constants.CRNCY_TABLE_NAME);
+			statement.setString(2, code);
+			statement.setString(3, name);
+			statement.setDouble(4, rate);
 			statement.executeUpdate();
 		}
 	}
@@ -69,13 +71,15 @@ public class MySQLCurrencyDBMock {
 		}
 	}
 
-	private static ResultSet selectCurrencyByCode(BasicDataSource dataSource, String code) throws SQLException {
+	private static ResultSet selectCurrencyByCode(BasicDataSource dataSource, String code) {
 		String sql = "SELECT * FROM " + Constants.CRNCY_TABLE_NAME + " WHERE " + Constants.CRNCY_CODE_COLOMN + " = ?";
-		Connection connection = dataSource.getConnection();
-		PreparedStatement statement = connection.prepareStatement(sql);
-		statement.setString(1, code);
-		return statement.executeQuery();
-
+		try (Connection connection = dataSource.getConnection();
+				PreparedStatement statement = connection.prepareStatement(sql);) {
+			statement.setString(1, code);
+			return statement.executeQuery();
+		} catch (SQLException e) {
+			throw new IllegalStateException(e);
+		}
 	}
 
 }
