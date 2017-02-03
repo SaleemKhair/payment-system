@@ -82,7 +82,7 @@ public class MySQLPaymentRequestGatewayTest {
 					.executeUpdate();
 
 		} catch (SQLException e) {
-			e.printStackTrace();
+			throw new IllegalStateException(e);
 		}
 	}
 
@@ -92,7 +92,7 @@ public class MySQLPaymentRequestGatewayTest {
 			Utilities.preparedStatement(dataSource.getConnection(), Constants.TRUNCATE_PAYMENT_REQUEST_TABLE)
 					.executeUpdate();
 		} catch (SQLException e) {
-			e.printStackTrace();
+			throw new IllegalStateException(e);
 		}
 	}
 

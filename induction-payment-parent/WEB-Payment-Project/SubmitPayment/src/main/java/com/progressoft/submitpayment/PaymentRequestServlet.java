@@ -12,6 +12,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.jboss.logging.Logger;
+
 import com.progressoft.jip.context.AppContext;
 import com.progressoft.jip.context.AppContextJPA;
 import com.progressoft.jip.gateways.views.PaymentRequestView;
@@ -23,6 +25,7 @@ public class PaymentRequestServlet extends HttpServlet {
 	private AppContext context;
 	private String selectedIban;
 	private PaymentRequestUseCases paymentRequestUseCases;
+	private static final Logger logger = Logger.getLogger(PaymentRequestServlet.class.getName());
 
 	@Override
 	public void init() throws ServletException {
@@ -58,8 +61,7 @@ public class PaymentRequestServlet extends HttpServlet {
 				setHeaders(resp, selectedIban, formatType);
 				buildResponseContent(resp, generateReport);
 			} catch (RepositoryException e) {
-				// TODO throw an exception
-				e.printStackTrace();
+				logger.info(e);
 			}
 		} else {
 			resp.sendRedirect("/web-war/paymentRequest");

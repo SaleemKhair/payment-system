@@ -35,7 +35,7 @@ public class AccountJpaRepositoryImplTest {
 	private EntityManager entityManager;
 
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() {
 		entityManagerFactory = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME, prepareDBProperties());
 		entityManager = entityManagerFactory.createEntityManager();
 		accountJpaRepository = new AccountJpaRepositoryImpl(entityManager);

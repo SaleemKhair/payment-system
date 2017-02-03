@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.jboss.logging.Logger;
+
 import com.progressoft.jip.beans.Account;
 import com.progressoft.jip.context.AppContext;
 import com.progressoft.jip.context.AppContextJPA;
@@ -19,6 +21,7 @@ public class AccountUpdateServlet extends HttpServlet {
 	private static final String PAGE_CONTENT = "pageContent";
 	private String iban;
 	private AppContext context;
+	private static final Logger logger = Logger.getLogger(AccountUpdateServlet.class.getName());
 
 	@Override
 	public void init() throws ServletException {
@@ -58,7 +61,7 @@ public class AccountUpdateServlet extends HttpServlet {
 			try {
 				context.getAccountUseCases().editAccount(account);
 			} catch (ValidationException e) {
-				e.printStackTrace();
+				logger.info(e);
 			}
 		}
 		resp.sendRedirect("/web-war/updateAccount");

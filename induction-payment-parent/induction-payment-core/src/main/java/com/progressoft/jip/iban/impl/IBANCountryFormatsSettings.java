@@ -51,13 +51,13 @@ public class IBANCountryFormatsSettings {
 
     public int getIndexByName(String columnName) {
 
-	if (columnName.equals("countryCodeIndex"))
+	if ("countryCodeIndex".equals(columnName))
 	    return countryCodeIndex;
-	if (columnName.equals("countryNameIndex"))
+	if ("countryNameIndex".equals(columnName))
 	    return countryNameIndex;
-	if (columnName.equals("ibanFormatIndex"))
+	if ("ibanFormatIndex".equals(columnName))
 	    return ibanFormatIndex;
-	if (columnName.equals("ibanLengthIndex"))
+		if ("ibanLengthIndex".equals(columnName))
 	    return ibanLengthIndex;
 	return -1;
     }

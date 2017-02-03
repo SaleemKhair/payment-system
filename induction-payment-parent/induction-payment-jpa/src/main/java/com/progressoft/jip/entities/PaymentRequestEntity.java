@@ -1,14 +1,19 @@
 package com.progressoft.jip.entities;
 
 import java.io.Serializable;
-import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Date;
 
-/**
- * The persistent class for the paymentRequest database table.
- * 
- */
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
 @Entity
 @Table(name = "paymentRequest")
 @NamedQueries({ @NamedQuery(name = "PaymentRequestEntity.findAll", query = "SELECT p FROM PaymentRequestEntity p"),
@@ -29,19 +34,20 @@ public class PaymentRequestEntity implements Serializable {
 
 	private BigDecimal paymentAmount;
 
+	private String paymentStatus;
+
+	private String submissionState;
+
 	@Temporal(TemporalType.DATE)
 	private Date paymentDate;
 
-	// bi-directional many-to-one association to PaymentPurposeEntity
 	@ManyToOne
 	@JoinColumn(name = "purposeCode")
 	private PaymentPurposeEntity paymentPurpose;
 
-	// bi-directional many-to-one association to CurrencyEntity
 	@ManyToOne
 	private CurrencyEntity currency;
 
-	// bi-directional many-to-one association to AccountEntity
 	@ManyToOne
 	@JoinColumn(name = "orderingAccount_iban")
 	private AccountEntity account;
@@ -119,6 +125,22 @@ public class PaymentRequestEntity implements Serializable {
 
 	public void setAccount(AccountEntity account) {
 		this.account = account;
+	}
+
+	public String getPaymentStatus() {
+		return paymentStatus;
+	}
+
+	public void setPaymentStatus(String paymentStatus) {
+		this.paymentStatus = paymentStatus;
+	}
+
+	public String getSubmissionState() {
+		return submissionState;
+	}
+
+	public void setSubmissionState(String submissionState) {
+		this.submissionState = submissionState;
 	}
 
 }

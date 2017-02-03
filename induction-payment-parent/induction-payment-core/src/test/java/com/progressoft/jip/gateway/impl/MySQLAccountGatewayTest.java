@@ -35,7 +35,7 @@ public class MySQLAccountGatewayTest {
 		try {
 			new QueryRunner(datasource).update("delete from ACCOUNT where IBAN='JO94CBJO0010000000000131000399'");
 		} catch (SQLException e) {
-			throw new IllegalStateException("Couldn't prepare database");
+			throw new IllegalStateException("Couldn't prepare database", e);
 		}
 
 	}

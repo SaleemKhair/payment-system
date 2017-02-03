@@ -11,12 +11,16 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 
+import org.jboss.logging.Logger;
+
 import com.progressoft.jip.iban.IBANCountryFormatsReader;
 import com.progressoft.jip.iban.IBANVersion;
 import com.progressoft.jip.iban.exception.CountryCodeNotFoundException;
 
 @IBANVersion("ISO13616")
 public class IBANCountryFormatsReaderImp implements IBANCountryFormatsReader {
+
+	private Logger logger = Logger.getLogger(IBANCountryFormatsReaderImp.class.getName());
 	private static final String IBAN_COUNTRY_FORMATS_FILE = "ibanformats/IBANCountryFormats.csv";
 	private static final String IBAN_COUNTRY_FORMATS_SETTINGS = "ibanformats/IBANCountryFormatsSettings.xml";
 	private static final String COMMA_REGEX = ",";
@@ -34,26 +38,33 @@ public class IBANCountryFormatsReaderImp implements IBANCountryFormatsReader {
 			ibanCountryFormatsSettings = (IBANCountryFormatsSettings) jaxbUnmarshaller
 					.unmarshal(getClass().getClassLoader().getResourceAsStream(IBAN_COUNTRY_FORMATS_SETTINGS));
 		} catch (JAXBException e) {
-			e.printStackTrace();
+			logger.info(e);
 		}
 	}
 
 	@Override
 	public String getCountryName(String countryCode) {
-		return getLineContainingCountryCode(countryCode).get().split(COMMA_REGEX)[ibanCountryFormatsSettings
-				.getIndexByName("countryNameIndex")];
+		String code = getCountryCode(countryCode);
+		return code.split(COMMA_REGEX)[ibanCountryFormatsSettings.getIndexByName("countryNameIndex")];
 	}
 
 	@Override
 	public String getIBANFormat(String countryCode) {
-		return getLineContainingCountryCode(countryCode).get().split(COMMA_REGEX)[ibanCountryFormatsSettings
-				.getIndexByName("ibanFormatIndex")];
+		String code = getCountryCode(countryCode);
+		return code.split(COMMA_REGEX)[ibanCountryFormatsSettings.getIndexByName("ibanFormatIndex")];
 	}
 
 	@Override
 	public int getIBANLength(String countryCode) {
-		return Integer.parseInt(getLineContainingCountryCode(countryCode).get()
-				.split(COMMA_REGEX)[ibanCountryFormatsSettings.getIndexByName("ibanLengthIndex")]);
+		String code = getCountryCode(countryCode);
+		return Integer.parseInt(code.split(COMMA_REGEX)[ibanCountryFormatsSettings.getIndexByName("ibanLengthIndex")]);
+	}
+
+	private String getCountryCode(String countryCode) {
+		Optional<String> line = getLineContainingCountryCode(countryCode);
+		if (!line.isPresent())
+			throw new CountryCodeNotFoundException();
+		return line.get();
 	}
 
 	@Override

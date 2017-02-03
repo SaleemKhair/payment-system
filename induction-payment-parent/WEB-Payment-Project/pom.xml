@@ -3,7 +3,6 @@
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>web-interface</artifactId>
 	<packaging>pom</packaging>
-
 	<parent>
 		<groupId>com.progressoft.jip</groupId>
 		<artifactId>induction-payment-parent</artifactId>

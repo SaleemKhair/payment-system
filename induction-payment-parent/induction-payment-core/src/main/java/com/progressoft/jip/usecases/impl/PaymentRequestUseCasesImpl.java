@@ -46,6 +46,7 @@ public class PaymentRequestUseCasesImpl implements PaymentRequestUseCases {
 		Account orderingAccount = accountRepository.loadAccountByIban(paymentRequest.getOrderingAccountIban());
 		paymentRequestHandler.validatePaymentRequest(paymentRequest, orderingAccount);
 		paymentRequestHandler.fillAmountInWords(paymentRequest, amountWriter, writerKey);
+		paymentRequestHandler.setPaymentRequestStatus(paymentRequest);
 		paymentRequestRepository.insertPaymentRequest(paymentRequest);
 	}
 

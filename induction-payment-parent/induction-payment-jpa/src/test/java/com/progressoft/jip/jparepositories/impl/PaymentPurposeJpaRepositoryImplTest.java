@@ -27,7 +27,7 @@ public class PaymentPurposeJpaRepositoryImplTest {
 	private final String PERSISTENCE_UNIT_NAME = "induction-payment-jpa";
 
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() {
 		entityManagerFactory = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME, prepareDBProperties());
 		entityManager = entityManagerFactory.createEntityManager();
 		paymentPurposeJpaRepository = new PaymentPurposeJpaRepositoryImpl(entityManager);
@@ -113,6 +113,7 @@ public class PaymentPurposeJpaRepositoryImplTest {
 		settingsMap.put("javax.persistence.jdbc.password", "root");
 		settingsMap.put("javax.persistence.jdbc.url", "jdbc:mysql://localhost:3306/mockdata");
 		settingsMap.put("javax.persistence.jdbc.driver", "com.mysql.jdbc.Driver");
+		settingsMap.put("hibernate.hbm2ddl.auto", "update");
 		return settingsMap;
 	}
 
