@@ -1,4 +1,4 @@
-package loginImpl;
+package login.impl;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,18 +11,18 @@ public class MemoryAuthenticationManager implements AuthenticationManager {
 
 	private Map<String, Credentials> credentials = new HashMap<>();
 
-	{
-		Credentials user = new Credentials();
-		user.username = "admin";
-		user.fullName = "Administrator";
-		user.password = "pass1234";
-		credentials.put("admin", user);
-		
-		user = new Credentials();
-		user.username = "manager";
-		user.fullName = "System Manager";
-		user.password = "pass1234";
-		credentials.put("manager", user);
+	public MemoryAuthenticationManager() {
+		Credentials admin = new Credentials();
+		admin.username = "admin";
+		admin.fullName = "Administrator";
+		admin.password = "pass1234";
+		credentials.put("admin", admin);
+
+		Credentials manager = new Credentials();
+		manager.username = "manager";
+		manager.fullName = "System Manager";
+		manager.password = "pass1234";
+		credentials.put("manager", manager);
 	}
 
 	@Override

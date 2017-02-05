@@ -27,10 +27,10 @@ import com.progressoft.jip.utilities.DataBaseSettings;
 public class MySQLPaymentPurposeGatewayTest {
 
 	private PaymentPurposeGateway mySQLPaymentPurposeGateway;
-	private BasicDataSource dataSource;
 
 	@Before
 	public void setup() {
+		BasicDataSource dataSource;
 		dataSource = new BasicDataSource();
 		DataBaseSettings dbSettings = DataBaseSettings.getInstance();
 		dataSource.setUrl(dbSettings.url());

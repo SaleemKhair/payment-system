@@ -19,6 +19,7 @@ public class AccountValidator implements Validator<Account, ValidationException>
 
 	@Override
 	public void validate(Account account) throws InvalidIBANException, AccountValidationException {
+		// TODO just replace it with ibanValidator.validate(iban);
 		validateIban(account.getIban());
 		validateBalance(account.getBalance());
 	}

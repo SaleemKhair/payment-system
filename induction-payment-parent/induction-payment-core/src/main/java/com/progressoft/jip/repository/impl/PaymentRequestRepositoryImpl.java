@@ -47,9 +47,6 @@ public class PaymentRequestRepositoryImpl implements PaymentRequestRepository {
 		ArrayList<PaymentRequest> collection = new ArrayList<>();
 		gateway.loadPaymentRequestsByOrderingAccountIban(iban).stream()
 				.forEach(p -> collection.add((PaymentRequest) p));
-		// if (collection.isEmpty()) {
-		// throw new AccountDoesNotHavePaymentRequestsException();
-		// }
 		return Collections.unmodifiableCollection(collection);
 	}
 

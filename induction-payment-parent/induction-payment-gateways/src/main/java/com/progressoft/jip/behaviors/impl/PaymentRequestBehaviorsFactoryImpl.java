@@ -21,13 +21,12 @@ import com.progressoft.jip.gateways.exceptions.NullAccountIBANException;
 import com.progressoft.jip.gateways.views.PaymentRequestView;
 
 public class PaymentRequestBehaviorsFactoryImpl implements PaymentRequestBehaviorsFactory {
-	public static final Behavior<PaymentRequestView> LOAD_PAYMENT_REQUEST_BY_ID = new AbstractBehavior<PaymentRequestView>() {
 
-		private int id;
+	public static final Behavior<PaymentRequestView> LOAD_PAYMENT_REQUEST_BY_ID = new AbstractBehavior<PaymentRequestView>() {
 
 		@Override
 		public PaymentRequestView operation() {
-			id = (int) parameters[0];
+			int id = (int) parameters[0];
 			try {
 				List<PaymentRequestView> list = new ArrayList<>();
 				runner.query(Constants.LOAD_PAYMENT_REQUEST_BY_ID_SQL_STATEMENT,
@@ -39,9 +38,7 @@ public class PaymentRequestBehaviorsFactoryImpl implements PaymentRequestBehavio
 			} catch (SQLException e) {
 				throw new IllegalStateException(e);
 			}
-
 		}
-
 	};
 
 	public static final Behavior<Void> DELETE_PAYMENT_REQUEST_BY_ID = new AbstractBehavior<Void>() {
@@ -58,7 +55,6 @@ public class PaymentRequestBehaviorsFactoryImpl implements PaymentRequestBehavio
 				throw new IllegalStateException(e);
 			}
 		}
-
 	};
 
 	public static final Behavior<Void> INSERT_PAYMENT_REQUEST = new AbstractBehavior<Void>() {
@@ -79,7 +75,6 @@ public class PaymentRequestBehaviorsFactoryImpl implements PaymentRequestBehavio
 				throw new IllegalStateException(e);
 			}
 		}
-
 	};
 
 	public static final Behavior<Collection<PaymentRequestView>> LOAD_PAYMENT_REQUESTS = new AbstractBehavior<Collection<PaymentRequestView>>() {
@@ -118,7 +113,6 @@ public class PaymentRequestBehaviorsFactoryImpl implements PaymentRequestBehavio
 				throw new IllegalStateException(e);
 			}
 		}
-
 	};
 
 	private static final Behavior<Void> UPDATE_PAYMENT_REQUEST = new AbstractBehavior<Void>() {
@@ -132,7 +126,6 @@ public class PaymentRequestBehaviorsFactoryImpl implements PaymentRequestBehavio
 						dataStructure.getBeneficiaryName(), dataStructure.getPaymentAmount(),
 						dataStructure.getCurrencyCode(), dataStructure.getPurposeCode(), dataStructure.getPaymentDate(),
 						dataStructure.getAmountInWords(), dataStructure.getId(), dataStructure.getAmountInWords());
-
 				if (effectedRow == 0)
 					throw new NoneExistingPaymentRequestException();
 				return null;
@@ -140,15 +133,13 @@ public class PaymentRequestBehaviorsFactoryImpl implements PaymentRequestBehavio
 				throw new IllegalStateException(e);
 			}
 		}
-
 	};
 
 	private static final Behavior<Collection<PaymentRequestView>> LOAD_PAYMENT_REQUESTS_BY_PAYMENT_DATE = new AbstractBehavior<Collection<PaymentRequestView>>() {
-		private String paymentDate;
 
 		@Override
 		public Collection<PaymentRequestView> operation() {
-			paymentDate = ((LocalDate) parameters[0]).toString();
+			String paymentDate = ((LocalDate) parameters[0]).toString();
 			try {
 				List<PaymentRequestView> list = new ArrayList<>();
 				runner.query(Constants.LOAD_PAYMENT_REQUEST_BY_PAYMENT_DATE,

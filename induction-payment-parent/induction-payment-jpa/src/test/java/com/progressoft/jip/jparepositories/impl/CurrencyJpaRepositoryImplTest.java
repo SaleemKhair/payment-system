@@ -18,17 +18,16 @@ import com.progressoft.jip.entities.CurrencyEntity;
 import com.progressoft.jip.jparepositories.exceptions.NullCurrencyCodeException;
 
 public class CurrencyJpaRepositoryImplTest {
-	private EntityManager entityManager;
-	private final String CURRENCYCODE = "JOD";
-	private final String PERSISTENCE_UNIT_NAME = "induction-payment-jpa";
+	private static final String CURRENCYCODE = "JOD";
+	private static final String PERSISTENCE_UNIT_NAME = "induction-payment-jpa";
 
-	private EntityManagerFactory entityManagerFactory;
 	private CurrencyJpaRepositoryImpl currencyJpaRepository;
 
 	@Before
 	public void setUp() {
-		entityManagerFactory = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME, prepareDBProperties());
-		entityManager = entityManagerFactory.createEntityManager();
+		EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME,
+				prepareDBProperties());
+		EntityManager entityManager = entityManagerFactory.createEntityManager();
 		currencyJpaRepository = new CurrencyJpaRepositoryImpl(entityManager);
 	}
 

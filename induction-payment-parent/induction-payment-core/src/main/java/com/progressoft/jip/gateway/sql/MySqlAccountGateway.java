@@ -27,8 +27,8 @@ public class MySqlAccountGateway extends AbstractGateway implements AccountGatew
 	}
 
 	@Override
-	public AccountView loadAccountByIban(String IBAN) {
-		return loadAccountByIBAN.execute(dataSource, IBAN);
+	public AccountView loadAccountByIban(String iban) {
+		return loadAccountByIBAN.execute(dataSource, iban);
 	}
 
 	@Override

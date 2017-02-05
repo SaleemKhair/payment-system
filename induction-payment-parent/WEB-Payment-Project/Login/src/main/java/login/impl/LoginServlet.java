@@ -1,4 +1,4 @@
-package loginImpl;
+package login.impl;
 
 import java.io.IOException;
 
@@ -48,7 +48,7 @@ public class LoginServlet extends HttpServlet {
 		String password = req.getParameter("password");
 		String address = req.getRemoteAddr();
 
-		AuthenticateRequest authenticateRequest = new AuthenticateRequest() {
+		return new AuthenticateRequest() {
 
 			@Override
 			public String getUsername() {
@@ -65,6 +65,5 @@ public class LoginServlet extends HttpServlet {
 				return address;
 			}
 		};
-		return authenticateRequest;
 	}
 }

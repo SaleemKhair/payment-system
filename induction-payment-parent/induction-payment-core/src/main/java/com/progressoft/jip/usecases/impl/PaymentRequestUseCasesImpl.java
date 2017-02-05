@@ -90,7 +90,7 @@ public class PaymentRequestUseCasesImpl implements PaymentRequestUseCases {
 
 	@Override
 	public void executePayment(PaymentRequestView paymentRequest) {
-
+		// TODO for manual submission: approval or rejection of payment request
 	}
 
 	@Override

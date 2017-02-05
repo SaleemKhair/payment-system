@@ -5,6 +5,7 @@ target/
 Servers/
 local.properties
 .settings/
+.sonar/
 .sonarlint/
 RemoteSystemsTempFiles/
 .loadpath

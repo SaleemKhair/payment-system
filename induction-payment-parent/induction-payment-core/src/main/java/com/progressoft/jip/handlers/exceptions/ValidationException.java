@@ -2,12 +2,13 @@ package com.progressoft.jip.handlers.exceptions;
 
 public class ValidationException extends Exception {
 
+	private static final long serialVersionUID = 1L;
+
 	public ValidationException() {
 		super();
 	}
 
-	public ValidationException(String message, Throwable cause, boolean enableSuppression,
-			boolean writableStackTrace) {
+	public ValidationException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
 		super(message, cause, enableSuppression, writableStackTrace);
 	}
 
@@ -22,7 +23,5 @@ public class ValidationException extends Exception {
 	public ValidationException(Throwable cause) {
 		super(cause);
 	}
-
-	private static final long serialVersionUID = 1L;
 
 }
