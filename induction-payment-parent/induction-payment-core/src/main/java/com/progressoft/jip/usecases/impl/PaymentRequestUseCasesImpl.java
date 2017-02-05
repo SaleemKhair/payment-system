@@ -46,6 +46,7 @@ public class PaymentRequestUseCasesImpl implements PaymentRequestUseCases {
 		Account orderingAccount = accountRepository.loadAccountByIban(paymentRequest.getOrderingAccountIban());
 		paymentRequestHandler.validatePaymentRequest(paymentRequest, orderingAccount);
 		paymentRequestHandler.fillAmountInWords(paymentRequest, amountWriter, writerKey);
+		paymentRequestHandler.setPaymentRequestStatus(paymentRequest, "created");
 		paymentRequestRepository.insertPaymentRequest(paymentRequest);
 	}
 
@@ -89,7 +90,7 @@ public class PaymentRequestUseCasesImpl implements PaymentRequestUseCases {
 
 	@Override
 	public void executePayment(PaymentRequestView paymentRequest) {
-
+		// TODO if submit was manual nothing to do yet
 	}
 
 	@Override

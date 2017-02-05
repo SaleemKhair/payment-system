@@ -3,11 +3,13 @@ package com.progressoft.jip.handlers.impl;
 import java.math.BigDecimal;
 
 import com.progressoft.jip.beans.Account;
+import com.progressoft.jip.beans.PaymentRequest;
 import com.progressoft.jip.datastructures.Amount;
+import com.progressoft.jip.gateways.views.AccountView;
 import com.progressoft.jip.handlers.AccountHandler;
-import com.progressoft.jip.handlers.exceptions.AccountDoesNotHaveEnoughBalanceException;
 import com.progressoft.jip.handlers.exceptions.ValidationException;
 import com.progressoft.jip.handlers.validators.Validator;
+import com.progressoft.jip.repository.CurrencyExchangeRateRepository;
 
 public class AccountHandlerImpl implements AccountHandler {
 
@@ -18,19 +20,19 @@ public class AccountHandlerImpl implements AccountHandler {
 	}
 
 	@Override
-	public void debit(Account account, Amount amount) {
+	public void debit(Account account, PaymentRequest paymentRequest,
+			CurrencyExchangeRateRepository currencyExchangeRateRepository) {
 		String currencyCode = account.getCurrencyCode();
+		Amount amount = new Amount(currencyExchangeRateRepository, paymentRequest.getPaymentAmount(),
+				paymentRequest.getCurrencyCode());
 		BigDecimal debitAmount = amount.valueIn(currencyCode);
-		if (!hasEnoughBalance(debitAmount.doubleValue(), account.getBalance()))
-			throw new AccountDoesNotHaveEnoughBalanceException();
-		account.setBalance(account.getBalance().subtract(debitAmount));
-	}
-
-	@Override
-	public void credit(Account account, Amount amount) {
-		String currencyCode = account.getCurrencyCode();
-		BigDecimal creditAmount = amount.valueIn(currencyCode);
-		account.setBalance(account.getBalance().add(creditAmount));
+		paymentRequest.setSubmissionState("Submitted");
+		if (!hasEnoughBalance(debitAmount.doubleValue(), account.getBalance())) {
+			paymentRequest.setPaymentStatus("Rejected");
+		} else {
+			paymentRequest.setPaymentStatus("Approved");
+			account.setBalance(account.getBalance().subtract(debitAmount));
+		}
 	}
 
 	private boolean hasEnoughBalance(double debitAmount, BigDecimal balance) {
@@ -38,8 +40,27 @@ public class AccountHandlerImpl implements AccountHandler {
 	}
 
 	@Override
+	public void credit(Account account, PaymentRequest paymentRequest,
+			CurrencyExchangeRateRepository currencyExchangeRateRepository) {
+		String currencyCode = account.getCurrencyCode();
+		Amount amount = new Amount(currencyExchangeRateRepository, paymentRequest.getPaymentAmount(),
+				paymentRequest.getCurrencyCode());
+		BigDecimal creditAmount = amount.valueIn(currencyCode);
+		account.setBalance(account.getBalance().add(creditAmount));
+	}
+
+	@Override
 	public void validateAccount(Account account) throws ValidationException {
 		validator.validate(account);
+	}
+
+	@Override
+	public boolean checkAccountHasEnoughBalance(AccountView accountView, Amount paymentAmount) {
+		BigDecimal amount = paymentAmount.getAmount();
+		if (!paymentAmount.getCurrencyCode().equals(accountView.getCurrencyCode())) {
+			amount = paymentAmount.valueIn(accountView.getCurrencyCode());
+		}
+		return accountView.getBalance().doubleValue() >= amount.doubleValue();
 	}
 
 }

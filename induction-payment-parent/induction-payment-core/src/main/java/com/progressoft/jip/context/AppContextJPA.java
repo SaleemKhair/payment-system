@@ -1,6 +1,7 @@
 package com.progressoft.jip.context;
 
 import java.util.List;
+import java.util.Objects;
 
 import com.progressoft.jip.beans.Account;
 import com.progressoft.jip.beans.PaymentPurpose;
@@ -27,6 +28,7 @@ import com.progressoft.jip.handlers.validators.impl.AccountValidator;
 import com.progressoft.jip.handlers.validators.impl.PaymentPurposeValidator;
 import com.progressoft.jip.handlers.validators.impl.PaymentRequestValidator;
 import com.progressoft.jip.iban.IBANGeneralValidator;
+import com.progressoft.jip.jobwatcher.JobWatcher;
 import com.progressoft.jip.jparepositories.AccountJpaRepository;
 import com.progressoft.jip.jparepositories.CurrencyJpaRepository;
 import com.progressoft.jip.jparepositories.PaymentPurposeJpaRepository;
@@ -95,8 +97,11 @@ public class AppContextJPA implements AppContext {
 	private final CurrencyUseCases currencyUseCases;
 	private final PaymentPurposeUseCases paymentPurposeUseCases;
 	private final PaymentRequestUseCases paymentRequestUseCases;
+	private JobWatcher jobWatcher;
 
-	public AppContextJPA() {
+	private static AppContextJPA instance;
+
+	private AppContextJPA() {
 		rules.registerRule("five.years.ahead", new FiveYearsAheadRule());
 		rules.registerRule("five.months.ahead", new FiveMonthsAheadRule());
 		rules.registerRule("five.days.ahead", new FiveDaysAheadRule());
@@ -139,7 +144,17 @@ public class AppContextJPA implements AppContext {
 		paymentPurposeUseCases = new PaymentPurposeUseCasesImpl(paymentPurposeRepository, paymentPurposeHandler);
 		paymentRequestUseCases = new PaymentRequestUseCasesImpl(paymentRequestHandler, accountRepository,
 				paymentRequestRepository, new ReportProvider(paymentRequestRepository));
+		jobWatcher = new JobWatcher(paymentRequestHandler, accountRepository, paymentRequestRepository, accountHandler);
+		jobWatcher.startCronJobSchedule();
+	}
 
+	public static AppContextJPA getContext() {
+		synchronized (AppContextJPA.class) {
+			if (Objects.isNull(instance)) {
+				instance = new AppContextJPA();
+			}
+			return instance;
+		}
 	}
 
 	@Override

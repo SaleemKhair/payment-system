@@ -23,6 +23,8 @@ public class PaymentRequest implements Serializable, PaymentRequestView {
 	private String purposeCode;
 	private Date paymentDate;
 	private String amountInWords;
+	private String paymentStatus;
+	private String submissionState;
 
 	public PaymentRequest() {
 		super();
@@ -106,6 +108,24 @@ public class PaymentRequest implements Serializable, PaymentRequestView {
 
 	public void setAmountInWords(String amountInWords) {
 		this.amountInWords = amountInWords;
+	}
+
+	@Override
+	public String getPaymentStatus() {
+		return paymentStatus;
+	}
+
+	public void setPaymentStatus(String paymentStatus) {
+		this.paymentStatus = paymentStatus;
+	}
+
+	@Override
+	public String getSubmissionState() {
+		return submissionState;
+	}
+
+	public void setSubmissionState(String submissionState) {
+		this.submissionState = submissionState;
 	}
 
 	@Override

@@ -19,6 +19,7 @@ public class PaymentRequestEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
 	private int id;
 
 	private String amountInWords;
@@ -31,6 +32,10 @@ public class PaymentRequestEntity implements Serializable {
 
 	@Temporal(TemporalType.DATE)
 	private Date paymentDate;
+	
+	private String paymentStatus;
+	
+	private String submissionState;
 
 	// bi-directional many-to-one association to PaymentPurposeEntity
 	@ManyToOne
@@ -121,4 +126,20 @@ public class PaymentRequestEntity implements Serializable {
 		this.account = account;
 	}
 
+	public String getPaymentStatus() {
+		return paymentStatus;
+	}
+
+	public void setPaymentStatus(String paymentStatus) {
+		this.paymentStatus = paymentStatus;
+	}
+
+	public String getSubmissionState() {
+		return submissionState;
+	}
+
+	public void setSubmissionState(String submissionState) {
+		this.submissionState = submissionState;
+	}
+	
 }

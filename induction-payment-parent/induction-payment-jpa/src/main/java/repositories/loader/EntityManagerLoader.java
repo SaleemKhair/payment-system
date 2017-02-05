@@ -39,6 +39,7 @@ public class EntityManagerLoader {
 		settingsMap.put("javax.persistence.jdbc.password", settings.password());
 		settingsMap.put("javax.persistence.jdbc.url", settings.url());
 		settingsMap.put("javax.persistence.jdbc.driver", settings.driverClassName());
+		settingsMap.put("hibernate.hbm2ddl.auto", "update");
 		return settingsMap;
 	}
 

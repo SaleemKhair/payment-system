@@ -64,6 +64,14 @@ public class AccountRepositoryTest {
 
 	@Test
 	public void givenAccountRepository_CallingUpdateAcount_PassingExistingAccount_ThenCallingLoadAccountByIBAN_ShouldReturnUpdatedAccount() {
+		Account originalAccount = newAccount();
+		accountRepository.updateAccount(originalAccount);
+		Account updatedAccount = accountRepository.loadAccountByIban("JO94CBJO0010000000000131000302");
+		AccountView view = updatedAccount;
+		assertTrue(Math.abs(view.getBalance().doubleValue() - originalAccount.getBalance().doubleValue()) <= 1e-3);
+	}
+
+	private Account newAccount() {
 		Account originalAccount = new Account();
 		originalAccount.setIban("JO94CBJO0010000000000131000302");
 		originalAccount.setType("TYPE");
@@ -71,10 +79,7 @@ public class AccountRepositoryTest {
 		originalAccount.setBalance(BigDecimal.valueOf(newBalance));
 		originalAccount.setStatus("ACTIVE");
 		originalAccount.setRule("five.months.ahead");
-		accountRepository.updateAccount(originalAccount);
-		Account updatedAccount = accountRepository.loadAccountByIban("JO94CBJO0010000000000131000302");
-		AccountView view = updatedAccount;
-		assertTrue(Math.abs(view.getBalance().doubleValue() - originalAccount.getBalance().doubleValue()) <= 1e-3);
+		return originalAccount;
 	}
 
 	@Test(expected = InvalidBalanceException.class)

@@ -118,6 +118,12 @@ public class MySQLPaymentRequestGatewayTest {
 
 	@Test
 	public void givenPaymentRequestGateway_CallingInsertPaymentRequest_ThenCallingLoadPaymentRequestById_ShouldReturnThePaymentRequest() {
+		PaymentRequest req = newPaymentRequest();
+		paymentRequestGatway.insertPaymentRequest(req);
+		paymentRequestGatway.loadPaymentRequestById(3);
+	}
+
+	private PaymentRequest newPaymentRequest() {
 		PaymentRequest req = new PaymentRequest();
 		req.setBeneficiaryAccountIban("ibanTo");
 		req.setOrderingAccountIban("ibanFrom");
@@ -126,8 +132,7 @@ public class MySQLPaymentRequestGatewayTest {
 		req.setPaymentAmount(new BigDecimal("562.4"));
 		req.setPurposeCode("SALA");
 		req.setPaymentDate(Date.valueOf(LocalDate.of(2017, 1, 2)));
-		paymentRequestGatway.insertPaymentRequest(req);
-		paymentRequestGatway.loadPaymentRequestById(3);
+		return req;
 	}
 
 	@Test(expected = NullAccountIBANException.class)

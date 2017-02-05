@@ -4,7 +4,6 @@ import java.time.LocalDate;
 
 import com.progressoft.jip.beans.Account;
 import com.progressoft.jip.beans.PaymentRequest;
-import com.progressoft.jip.datastructures.Amount;
 import com.progressoft.jip.handlers.AccountHandler;
 import com.progressoft.jip.handlers.PaymentRequestHandler;
 import com.progressoft.jip.handlers.exceptions.ValidationException;
@@ -21,7 +20,6 @@ public class PaymentRequestHandlerImpl implements PaymentRequestHandler {
 			Validator<PaymentRequest, ValidationException> validator) {
 		this.currencyExchangeRateRepository = currencyExchangeRateRepository;
 		this.validator = validator;
-
 	}
 
 	@Override
@@ -32,8 +30,9 @@ public class PaymentRequestHandlerImpl implements PaymentRequestHandler {
 
 	@Override
 	public void preformPayment(PaymentRequest paymentRequest, AccountHandler accountHandler, Account account) {
-		accountHandler.debit(account, new Amount(currencyExchangeRateRepository, paymentRequest.getPaymentAmount(),
-				paymentRequest.getCurrencyCode()));
+
+		accountHandler.debit(account, paymentRequest, currencyExchangeRateRepository);
+
 	}
 
 	@Override
@@ -49,4 +48,13 @@ public class PaymentRequestHandlerImpl implements PaymentRequestHandler {
 		paymentRequest.setAmountInWords(amountInWords);
 	}
 
+	@Override
+	public void setPaymentRequestStatus(PaymentRequest paymentRequest, String paymentStatus) {
+		paymentRequest.setPaymentStatus(paymentStatus);
+	}
+
+	@Override
+	public void setSubmissionState(PaymentRequest paymentRequest, String submissionState) {
+		paymentRequest.setSubmissionState(submissionState);
+	}
 }
