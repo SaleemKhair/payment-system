@@ -22,6 +22,7 @@ import com.progressoft.jip.utilities.DataBaseSettings;
 
 public class AccountRepositoryTest {
 
+	private static final String IBAN = "JO94CBJO0010000000000131000302";
 	private AccountRepository accountRepository;
 
 	@Before
@@ -58,21 +59,21 @@ public class AccountRepositoryTest {
 
 	@Test
 	public void givenAccountRepository_CallingLoadAccountByIBAN_PassingAvailableIBANCode_ShouldReturnAccount() {
-		Account account = accountRepository.loadAccountByIban("JO94CBJO0010000000000131000302");
-		assertEquals("JO94CBJO0010000000000131000302", account.getIban());
+		Account account = accountRepository.loadAccountByIban(IBAN);
+		assertEquals(IBAN, account.getIban());
 	}
 
 	@Test
 	public void givenAccountRepository_CallingUpdateAcount_PassingExistingAccount_ThenCallingLoadAccountByIBAN_ShouldReturnUpdatedAccount() {
 		Account originalAccount = new Account();
-		originalAccount.setIban("JO94CBJO0010000000000131000302");
+		originalAccount.setIban(IBAN);
 		originalAccount.setType("TYPE");
 		double newBalance = Math.random() * 500;
 		originalAccount.setBalance(BigDecimal.valueOf(newBalance));
 		originalAccount.setStatus("ACTIVE");
 		originalAccount.setRule("five.months.ahead");
 		accountRepository.updateAccount(originalAccount);
-		Account updatedAccount = accountRepository.loadAccountByIban("JO94CBJO0010000000000131000302");
+		Account updatedAccount = accountRepository.loadAccountByIban(IBAN);
 		AccountView view = updatedAccount;
 		assertTrue(Math.abs(view.getBalance().doubleValue() - originalAccount.getBalance().doubleValue()) <= 1e-3);
 	}
@@ -80,7 +81,7 @@ public class AccountRepositoryTest {
 	@Test(expected = InvalidBalanceException.class)
 	public void givenMySQLAccountGateway_CallingUpdateAcount_PassingNigativeBalance_ShouldThrowInvalidBalance() {
 		Account originalAccount = new Account();
-		originalAccount.setIban("JO94CBJO0010000000000131000302");
+		originalAccount.setIban(IBAN);
 		originalAccount.setType("TYPE");
 		originalAccount.setBalance(BigDecimal.valueOf(-200));
 		originalAccount.setStatus("ACTIVE");

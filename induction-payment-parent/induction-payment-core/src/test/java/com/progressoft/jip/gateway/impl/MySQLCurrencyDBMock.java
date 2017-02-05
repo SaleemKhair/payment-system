@@ -17,6 +17,9 @@ public class MySQLCurrencyDBMock {
 	public static final String UPDATED_CRNCY_CODE = "UPD";
 	public static final String DELETED_CRNCY_CODE = "DEL";
 
+	private MySQLCurrencyDBMock() {
+	}
+
 	public static void setUpDBEnviroment(BasicDataSource dataSource) {
 		try (Connection connection = dataSource.getConnection()) {
 

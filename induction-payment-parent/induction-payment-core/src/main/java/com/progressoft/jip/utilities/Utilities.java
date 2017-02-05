@@ -8,6 +8,9 @@ import java.sql.SQLException;
 
 public final class Utilities {
 
+	private Utilities() {
+	}
+
 	public static PreparedStatement preparedStatement(Connection connection, String sql, Object... vals) {
 		try (PreparedStatement prepareStatement = connection.prepareStatement(sql)) {
 			for (int i = 0; i < vals.length; ++i)
@@ -18,7 +21,7 @@ public final class Utilities {
 		}
 	}
 
-	public static String utf_8_encodded(String str) {
+	public static String utf8Encoded(String str) {
 		try {
 			return URLEncoder.encode(str, "UTF-8");
 		} catch (UnsupportedEncodingException e) {

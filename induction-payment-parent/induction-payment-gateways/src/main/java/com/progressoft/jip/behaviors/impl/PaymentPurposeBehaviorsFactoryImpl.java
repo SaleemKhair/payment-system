@@ -22,31 +22,6 @@ public class PaymentPurposeBehaviorsFactoryImpl implements PaymentPurposeBehavio
 
 	private static final String SQL_STATE_DUPLICATE_ENTRY = "23000";
 
-	@Override
-	public Behavior<PaymentPurposeView> loadPaymentPurposeByCodeBehavior() {
-		return LOAD_PAYMENT_PURPOSE_BY_CODE;
-	}
-
-	@Override
-	public Behavior<Void> insertPaymentPurposeBehavior() {
-		return INSERT_PAYMENT_RURPOSE_BEHAVIOR;
-	}
-
-	@Override
-	public Behavior<Collection<PaymentPurposeView>> loadPaymentPurposesBehavior() {
-		return LOAD_PAYMENT_PURPOSES;
-	}
-
-	@Override
-	public Behavior<Void> deletePaymentPurposeByCodeBehavior() {
-		return DELETE_PAYMENT_PURPOSE_BY_CODE;
-	}
-
-	@Override
-	public Behavior<Void> updatePaymentPurposeNameBehavior() {
-		return UPDATE_PAYMENT_PURPOSE_NAME;
-	}
-
 	public static final Behavior<PaymentPurposeView> LOAD_PAYMENT_PURPOSE_BY_CODE = new AbstractBehavior<PaymentPurposeView>() {
 
 		@Override
@@ -56,7 +31,6 @@ public class PaymentPurposeBehaviorsFactoryImpl implements PaymentPurposeBehavio
 			validateCode(code);
 			try {
 				ArrayList<PaymentPurposeView> collection = new ArrayList<>();
-
 				runner.query(Constants.LOAD_PAYMENT_PURPOSE_BY_CODE_SQL_STATEMENT,
 						new BeanListHandler<>(PaymentPurpose.class), code).stream()
 						.forEach(pp -> collection.add((PaymentPurposeView) pp));
@@ -67,17 +41,7 @@ public class PaymentPurposeBehaviorsFactoryImpl implements PaymentPurposeBehavio
 				throw new IllegalStateException(e);
 			}
 		}
-
 	};
-
-	private static void validateCode(String code) {
-		if (Objects.isNull(code)) {
-			throw new NullPaymentPurposeException();
-		}
-		if (code.isEmpty()) {
-			throw new EmptyPaymentPurposeCodeException();
-		}
-	}
 
 	public static final Behavior<Void> INSERT_PAYMENT_RURPOSE_BEHAVIOR = new AbstractBehavior<Void>() {
 
@@ -119,11 +83,9 @@ public class PaymentPurposeBehaviorsFactoryImpl implements PaymentPurposeBehavio
 
 	public static final Behavior<Void> DELETE_PAYMENT_PURPOSE_BY_CODE = new AbstractBehavior<Void>() {
 
-		private String code;
-
 		@Override
 		public Void operation() {
-			code = (String) parameters[0];
+			String code = (String) parameters[0];
 			try {
 				int effectedRows = runner.update(Constants.DELETE_PAYMENT_PURPOSE_SQL_STATEMENT, code);
 				if (effectedRows == 0)
@@ -138,13 +100,10 @@ public class PaymentPurposeBehaviorsFactoryImpl implements PaymentPurposeBehavio
 
 	public static final Behavior<Void> UPDATE_PAYMENT_PURPOSE_NAME = new AbstractBehavior<Void>() {
 
-		private String code;
-		private String newName;
-
 		@Override
 		public Void operation() {
-			code = (String) parameters[0];
-			newName = (String) parameters[1];
+			String code = (String) parameters[0];
+			String newName = (String) parameters[1];
 			int effectedRows;
 			try {
 				effectedRows = runner.update(Constants.UPDATE_PAYMENT_PURPOSE_SQL_STATEMENT, newName, code);
@@ -158,4 +117,37 @@ public class PaymentPurposeBehaviorsFactoryImpl implements PaymentPurposeBehavio
 
 	};
 
+	private static void validateCode(String code) {
+		if (Objects.isNull(code)) {
+			throw new NullPaymentPurposeException();
+		}
+		if (code.isEmpty()) {
+			throw new EmptyPaymentPurposeCodeException();
+		}
+	}
+
+	@Override
+	public Behavior<PaymentPurposeView> loadPaymentPurposeByCodeBehavior() {
+		return LOAD_PAYMENT_PURPOSE_BY_CODE;
+	}
+
+	@Override
+	public Behavior<Void> insertPaymentPurposeBehavior() {
+		return INSERT_PAYMENT_RURPOSE_BEHAVIOR;
+	}
+
+	@Override
+	public Behavior<Collection<PaymentPurposeView>> loadPaymentPurposesBehavior() {
+		return LOAD_PAYMENT_PURPOSES;
+	}
+
+	@Override
+	public Behavior<Void> deletePaymentPurposeByCodeBehavior() {
+		return DELETE_PAYMENT_PURPOSE_BY_CODE;
+	}
+
+	@Override
+	public Behavior<Void> updatePaymentPurposeNameBehavior() {
+		return UPDATE_PAYMENT_PURPOSE_NAME;
+	}
 }

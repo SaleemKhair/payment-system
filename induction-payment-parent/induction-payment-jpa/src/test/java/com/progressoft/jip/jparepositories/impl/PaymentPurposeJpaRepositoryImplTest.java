@@ -21,15 +21,14 @@ import com.progressoft.jip.jparepositories.exceptions.PaymentPurposeCodeRequired
 
 public class PaymentPurposeJpaRepositoryImplTest {
 
-	private EntityManager entityManager;
-	private EntityManagerFactory entityManagerFactory;
+	private static final String PERSISTENCE_UNIT_NAME = "induction-payment-jpa";
 	private PaymentPurposeJpaRepositoryImpl paymentPurposeJpaRepository;
-	private final String PERSISTENCE_UNIT_NAME = "induction-payment-jpa";
 
 	@Before
 	public void setUp() {
-		entityManagerFactory = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME, prepareDBProperties());
-		entityManager = entityManagerFactory.createEntityManager();
+		EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME,
+				prepareDBProperties());
+		EntityManager entityManager = entityManagerFactory.createEntityManager();
 		paymentPurposeJpaRepository = new PaymentPurposeJpaRepositoryImpl(entityManager);
 	}
 

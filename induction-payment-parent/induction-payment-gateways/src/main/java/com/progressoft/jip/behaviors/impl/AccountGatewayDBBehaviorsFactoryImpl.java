@@ -21,37 +21,17 @@ import com.progressoft.jip.gateways.views.AccountView;
 
 public class AccountGatewayDBBehaviorsFactoryImpl implements AccountGatewayDBBehaviorsFactory {
 
-	@Override
-	public Behavior<AccountView> loadAccountByIBAN() {
-		return LOAD_ACCOUNT_BY_IBAN;
-	}
-
-	@Override
-	public Behavior<Collection<AccountView>> loadAccounts() {
-		return LOAD_ACCOUNTS;
-	}
-
-	@Override
-	public Behavior<Void> createAccount() {
-		return INSERT_ACCOUNT_BEHAVIOR;
-	}
-
-	@Override
-	public Behavior<Void> updateAccount() {
-		return UPDATE_ACCOUNT_BEHAVIOR;
-	}
-
-	public final static Behavior<AccountView> LOAD_ACCOUNT_BY_IBAN = new AbstractBehavior<AccountView>() {
+	public static final Behavior<AccountView> LOAD_ACCOUNT_BY_IBAN = new AbstractBehavior<AccountView>() {
 
 		@Override
 		public AccountView operation() {
-			String IBAN = (String) parameters[0];
-			if (Objects.isNull(IBAN) || IBAN.trim().length() == 0) {
+			String iban = (String) parameters[0];
+			if (Objects.isNull(iban) || iban.trim().length() == 0) {
 				throw new NullAccountIBANException();
 			}
 			try {
 				List<Account> list = runner.query(Constants.GET_ACCOUNT_BY_IBAN, new BeanListHandler<>(Account.class),
-						IBAN);
+						iban);
 				if (list.isEmpty())
 					throw new AccountNotFoundException();
 				return list.get(0);
@@ -78,7 +58,6 @@ public class AccountGatewayDBBehaviorsFactoryImpl implements AccountGatewayDBBeh
 
 	};
 	public static final Behavior<Void> INSERT_ACCOUNT_BEHAVIOR = new AbstractBehavior<Void>() {
-
 		int effectedRow = 0;
 
 		@Override
@@ -93,10 +72,8 @@ public class AccountGatewayDBBehaviorsFactoryImpl implements AccountGatewayDBBeh
 			} catch (SQLException e) {
 				throw new NoAccountInsertedException(e);
 			}
-
-			if (effectedRow == 0) {
+			if (effectedRow == 0)
 				throw new NoAccountInsertedException();
-			}
 			return null;
 		}
 	};
@@ -112,17 +89,33 @@ public class AccountGatewayDBBehaviorsFactoryImpl implements AccountGatewayDBBeh
 				effectedRow = runner.update(Constants.UPDATE_ACCOUNT, dataStructure.getType(),
 						dataStructure.getBalance(), dataStructure.getStatus(), dataStructure.getCurrencyCode(),
 						dataStructure.getRule(), dataStructure.getIban());
-
 			} catch (SQLException e) {
 				throw new NoAccountUpdatedException(e);
 			}
-
-			if (effectedRow == 0) {
+			if (effectedRow == 0)
 				throw new NoAccountUpdatedException();
-			}
 			return null;
 		}
-
 	};
+
+	@Override
+	public Behavior<AccountView> loadAccountByIBAN() {
+		return LOAD_ACCOUNT_BY_IBAN;
+	}
+
+	@Override
+	public Behavior<Collection<AccountView>> loadAccounts() {
+		return LOAD_ACCOUNTS;
+	}
+
+	@Override
+	public Behavior<Void> createAccount() {
+		return INSERT_ACCOUNT_BEHAVIOR;
+	}
+
+	@Override
+	public Behavior<Void> updateAccount() {
+		return UPDATE_ACCOUNT_BEHAVIOR;
+	}
 
 }

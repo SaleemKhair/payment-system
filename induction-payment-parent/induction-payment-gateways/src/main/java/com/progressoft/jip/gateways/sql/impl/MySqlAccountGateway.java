@@ -10,9 +10,6 @@ import com.progressoft.jip.gateways.AccountGateway;
 import com.progressoft.jip.gateways.sql.AbstractGateway;
 import com.progressoft.jip.gateways.views.AccountView;
 
-
-
-
 public class MySqlAccountGateway extends AbstractGateway implements AccountGateway {
 
 	private Behavior<AccountView> loadAccountByIBAN;
@@ -27,11 +24,10 @@ public class MySqlAccountGateway extends AbstractGateway implements AccountGatew
 		this.updateAccount = factory.updateAccount();
 		this.createAccount = factory.createAccount();
 	}
-	
 
 	@Override
-	public AccountView loadAccountByIban(String IBAN) {
-		return loadAccountByIBAN.execute(dataSource, IBAN);
+	public AccountView loadAccountByIban(String iban) {
+		return loadAccountByIBAN.execute(dataSource, iban);
 	}
 
 	@Override
@@ -46,7 +42,7 @@ public class MySqlAccountGateway extends AbstractGateway implements AccountGatew
 
 	@Override
 	public void createAccount(AccountView newAccount) {
-		 createAccount.execute(dataSource, newAccount);
+		createAccount.execute(dataSource, newAccount);
 	}
 
 }

@@ -18,16 +18,6 @@ import com.progressoft.jip.gateways.views.CurrencyView;
 
 public class CurrencyGatewayDBBehaviorsFactoryImpl implements CurrencyGatewayDBBehaviorsFactory {
 
-	@Override
-	public Behavior<Collection<CurrencyView>> loadCurrencies() {
-		return LOAD_CURRENCIES;
-	}
-
-	@Override
-	public Behavior<CurrencyView> loadCurrencyByCode() {
-		return LOAD_CURRENCY_BY_CODE;
-	}
-
 	public static final Behavior<Collection<CurrencyView>> LOAD_CURRENCIES = new AbstractBehavior<Collection<CurrencyView>>() {
 
 		@Override
@@ -72,5 +62,15 @@ public class CurrencyGatewayDBBehaviorsFactoryImpl implements CurrencyGatewayDBB
 			return code.length() < 3;
 		}
 	};
+
+	@Override
+	public Behavior<Collection<CurrencyView>> loadCurrencies() {
+		return LOAD_CURRENCIES;
+	}
+
+	@Override
+	public Behavior<CurrencyView> loadCurrencyByCode() {
+		return LOAD_CURRENCY_BY_CODE;
+	}
 
 }
