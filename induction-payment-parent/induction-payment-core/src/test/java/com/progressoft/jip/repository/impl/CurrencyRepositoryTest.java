@@ -23,11 +23,10 @@ public class CurrencyRepositoryTest {
 	private CurrencyRepository currencyRepository;
 	@Rule
 	public ExpectedException expectedException = ExpectedException.none();
-	private BasicDataSource configureDataDource;
 
 	@Before
 	public void setUp() {
-		configureDataDource = configureConnection();
+		BasicDataSource configureDataDource = configureConnection();
 		this.currencyRepository = new CurrencyRepositoryImpl(
 				new MySqlCurrencyGateway(configureDataDource, new CurrencyGatewayDBBehaviorsFactoryImpl()));
 		setUpDBEnviroment(configureDataDource);

@@ -51,7 +51,7 @@ public class YahooCurrencyExchangeRateGateway extends AbstractRestfullGateway<Ya
 	}
 
 	private String url(String codeFrom, String codeTo) {
-		return YAHOO_SERVER + Utilities.utf_8_encodded(YAHOO_QUERY + " (\"" + codeTo + codeFrom + "\")")
+		return YAHOO_SERVER + Utilities.utf8Encoded(YAHOO_QUERY + " (\"" + codeTo + codeFrom + "\")")
 				+ "&env=store://datatables.org/alltableswithkeys&format=" + responseFormat;
 	}
 

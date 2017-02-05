@@ -18,11 +18,12 @@ public abstract class AbstractRestfullGateway<T>  implements CurrencyExchangeRat
 	protected T response(String url) {
 		try {
 			URL urlObject = new URL(url);
-			String line, data = "";
+			String line;
+			StringBuilder data = new StringBuilder();
 			BufferedReader reader = new BufferedReader(new InputStreamReader(urlObject.openStream()));
 			while ((line = reader.readLine()) != null)
-				data += line;
-			return parser.parse(data);
+				data.append(line);
+			return parser.parse(data.toString());
 		} catch (IOException e) {
 			throw new IllegalStateException(e);
 		}

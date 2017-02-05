@@ -32,7 +32,7 @@ public class PaymentRequestSubmitServlet extends HttpServlet {
 
 	@Override
 	public void init() throws ServletException {
-		AppContext context = new AppContextJPA();
+		AppContext context =  AppContextJPA.getContext();
 		paymentRequestUseCases = context.getPaymentRequestUseCases();
 		paymentPurposeUseCases = context.getPaymentPurposeUseCases();
 		accountUseCases = context.getAccountUseCases();

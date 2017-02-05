@@ -41,6 +41,17 @@ public class PaymentRequestValidator implements Validator<PaymentRequest, Valida
 				new PaymentPurposeValidator());
 	}
 
+	@Override
+	public void validate(PaymentRequest paymentRequest)
+			throws AccountRuleViolationException, InvalidIBANException, PurposeValidationException {
+		isValidAmount(paymentRequest.getPaymentAmount());
+		PaymentPurpose purpose = purposeRepository.loadPaymentPurposeByCode(paymentRequest.getPurposeCode());
+		purposeValidator.validate(purpose);
+		checkPaymentRule(accountRepository.loadAccountByIban(paymentRequest.getOrderingAccountIban()),
+				LocalDate.parse(paymentRequest.getPaymentDate().toString()));
+		validateBeneficiaryIban(paymentRequest.getBeneficiaryAccountIban());
+	}
+
 	private void checkPaymentRule(Account account, LocalDate paymentDate) throws AccountRuleViolationException {
 		if (!rules.getRule(account.getRule()).satistfy(paymentDate))
 			throw new AccountRuleViolationException(account.getRule());
@@ -54,17 +65,6 @@ public class PaymentRequestValidator implements Validator<PaymentRequest, Valida
 		if (amount.doubleValue() < 0) {
 			throw new InvalidAmountException();
 		}
-	}
-
-	@Override
-	public void validate(PaymentRequest paymentRequest)
-			throws AccountRuleViolationException, InvalidIBANException, PurposeValidationException {
-		isValidAmount(paymentRequest.getPaymentAmount());
-		PaymentPurpose purpose = purposeRepository.loadPaymentPurposeByCode(paymentRequest.getPurposeCode());
-		purposeValidator.validate(purpose);
-		checkPaymentRule(accountRepository.loadAccountByIban(paymentRequest.getOrderingAccountIban()),
-				LocalDate.parse(paymentRequest.getPaymentDate().toString()));
-		validateBeneficiaryIban(paymentRequest.getBeneficiaryAccountIban());
 	}
 
 }

@@ -1,7 +1,6 @@
 package com.progressoft.jip.jparepositories.impl;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Objects;
 
 import javax.persistence.EntityManager;
@@ -33,8 +32,7 @@ public class CurrencyJpaRepositoryImpl extends AbstractRepository implements Cur
 		return transactObject(entityManager -> {
 			TypedQuery<CurrencyEntity> typedQuery = entityManager.createNamedQuery(FIND_ALL_CURRENCIES,
 					CurrencyEntity.class);
-			List<CurrencyEntity> resultList = typedQuery.getResultList();
-			return resultList;
+			return typedQuery.getResultList();
 		});
 	}
 

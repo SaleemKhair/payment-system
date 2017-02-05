@@ -24,6 +24,8 @@ import com.progressoft.jip.utilities.DataBaseSettings;
 
 public class MySQLAccountGatewayTest {
 
+	private static final String ACTIVE = "ACTIVE";
+	private static final String IBAN = "JO94CBJO0010000000000131000302";
 	private AccountGateway accountsGateway;
 	private Account accountDataStructure = new Account();
 
@@ -35,7 +37,7 @@ public class MySQLAccountGatewayTest {
 		try {
 			new QueryRunner(datasource).update("delete from ACCOUNT where IBAN='JO94CBJO0010000000000131000399'");
 		} catch (SQLException e) {
-			throw new IllegalStateException("Couldn't prepare database");
+			throw new IllegalStateException("Couldn't prepare database", e);
 		}
 
 	}
@@ -67,32 +69,32 @@ public class MySQLAccountGatewayTest {
 
 	@Test
 	public void givenMySQLAccountGateway_CallingLoadAccountByIBAN_PassingAvailableIBANCode_ShouldReturnAccount() {
-		AccountView accounts = accountsGateway.loadAccountByIban("JO94CBJO0010000000000131000302");
-		assertEquals("JO94CBJO0010000000000131000302", accounts.getIban());
+		AccountView accounts = accountsGateway.loadAccountByIban(IBAN);
+		assertEquals(IBAN, accounts.getIban());
 	}
 
 	@Test
 	public void givenMySQLAccountGateway_CallingUpdateAcount_PassingExistingAccount_ThenCallingLoadAccountByIBAN_ShouldReturnUpdatedAccount() {
 		Account originalAccount = new Account();
-		originalAccount.setIban("JO94CBJO0010000000000131000302");
+		originalAccount.setIban(IBAN);
 		originalAccount.setType("TYPE");
 		BigDecimal newBalance = BigDecimal.valueOf(Math.random() * 500);
 		originalAccount.setBalance(newBalance);
-		originalAccount.setStatus("ACTIVE");
+		originalAccount.setStatus(ACTIVE);
 		originalAccount.setCurrencyCode("USD");
 		originalAccount.setRule("five.months.ahead");
 		accountsGateway.updateAccount(originalAccount);
-		AccountView updatedAccount = accountsGateway.loadAccountByIban("JO94CBJO0010000000000131000302");
+		AccountView updatedAccount = accountsGateway.loadAccountByIban(IBAN);
 		assertTrue(Math.abs(newBalance.doubleValue() - updatedAccount.getBalance().doubleValue()) <= 1e-3);
 	}
 
 	@Test(expected = InvalidBalanceException.class)
 	public void givenMySQLAccountGateway_CallingUpdateAcount_PassingNegativeBalance_ShouldThrowInvalidBalance() {
 		Account originalAccount = new Account();
-		originalAccount.setIban("JO94CBJO0010000000000131000302");
+		originalAccount.setIban(IBAN);
 		originalAccount.setType("TYPE");
 		originalAccount.setBalance(BigDecimal.valueOf(-200));
-		originalAccount.setStatus("ACTIVE");
+		originalAccount.setStatus(ACTIVE);
 		accountsGateway.updateAccount(originalAccount);
 	}
 
@@ -102,7 +104,7 @@ public class MySQLAccountGatewayTest {
 		accountDataStructure.setBalance(BigDecimal.valueOf(500));
 		accountDataStructure.setCurrencyCode("JOD");
 		accountDataStructure.setType("investment");
-		accountDataStructure.setStatus("ACTIVE");
+		accountDataStructure.setStatus(ACTIVE);
 		accountDataStructure.setRule("five.months.ahead");
 		accountsGateway.createAccount(accountDataStructure);
 		assertEquals(accountDataStructure.getIban(),
@@ -115,7 +117,7 @@ public class MySQLAccountGatewayTest {
 		accountDataStructure.setBalance(BigDecimal.valueOf(500));
 		accountDataStructure.setCurrencyCode("JOD");
 		accountDataStructure.setType("investment");
-		accountDataStructure.setStatus("ACTIVE");
+		accountDataStructure.setStatus(ACTIVE);
 		accountsGateway.createAccount(accountDataStructure);
 		assertEquals(accountDataStructure.getIban(),
 				accountsGateway.loadAccountByIban("JO94CBJO0010000000000131000321").getIban());

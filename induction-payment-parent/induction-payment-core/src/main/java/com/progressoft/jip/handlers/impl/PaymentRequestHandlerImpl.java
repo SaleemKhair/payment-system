@@ -49,6 +49,7 @@ public class PaymentRequestHandlerImpl implements PaymentRequestHandler {
 	}
 
 	@Override
+
 	public void setPaymentRequestStatus(PaymentRequest paymentRequest, String paymentStatus) {
 		paymentRequest.setPaymentStatus(paymentStatus);
 	}
@@ -57,4 +58,5 @@ public class PaymentRequestHandlerImpl implements PaymentRequestHandler {
 	public void setSubmissionState(PaymentRequest paymentRequest, String submissionState) {
 		paymentRequest.setSubmissionState(submissionState);
 	}
+
 }

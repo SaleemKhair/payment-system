@@ -1,7 +1,7 @@
 /**
  * 
  */
-package loginImpl;
+package login.impl;
 
 /**
  * @author PSLPT 147

@@ -25,17 +25,17 @@ import com.progressoft.jip.jparepositories.exceptions.NullAccountIBANException;
 
 public class AccountJpaRepositoryImplTest {
 
-	private final String NEW_ACCOUNT_IBAN = "RO49AAAA1B31245007593840000577555";
-	private final String PERSISTENCE_UNIT_NAME = "induction-payment-jpa";
-	private final String AVAILABLE_ACCOUNT_IBAN = "AZ21NABZ00000000137010001944";
-	private final String UNAVAILABLE_ACCOUNT_IBAN = "AZ21NABZ0sss0000000137010001944";
+	private static final String NEW_ACCOUNT_IBAN = "RO49AAAA1B31245007593840000577555";
+	private static final String PERSISTENCE_UNIT_NAME = "induction-payment-jpa";
+	private static final String AVAILABLE_ACCOUNT_IBAN = "AZ21NABZ00000000137010001944";
+	private static final String UNAVAILABLE_ACCOUNT_IBAN = "AZ21NABZ0sss0000000137010001944";
 
 	private AccountJpaRepositoryImpl accountJpaRepository;
 	private EntityManagerFactory entityManagerFactory;
 	private EntityManager entityManager;
 
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() {
 		entityManagerFactory = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME, prepareDBProperties());
 		entityManager = entityManagerFactory.createEntityManager();
 		accountJpaRepository = new AccountJpaRepositoryImpl(entityManager);

@@ -11,16 +11,13 @@ import java.time.LocalDate;
 import org.apache.commons.dbcp.BasicDataSource;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.progressoft.jip.beans.PaymentRequest;
 import com.progressoft.jip.behaviors.impl.PaymentRequestBehaviorsFactoryImpl;
 import com.progressoft.jip.gateways.exceptions.NoneExistingPaymentRequestException;
 import com.progressoft.jip.gateways.sql.impl.MySqlPaymentRequestGateway;
-import com.progressoft.jip.handlers.exceptions.AccountRuleViolationException;
 import com.progressoft.jip.handlers.exceptions.ValidationException;
-import com.progressoft.jip.iban.exception.InvalidIBANException;
 import com.progressoft.jip.repository.PaymentRequestRepository;
 import com.progressoft.jip.repository.exceptions.RepositoryException;
 import com.progressoft.jip.rules.impl.FiveDaysAheadRule;
@@ -35,6 +32,7 @@ import com.progressoft.jip.utilities.chequewriting.impl.EnglishChequeAmountWrite
 
 public class PaymentRequestRepositoryTest {
 
+	private static final String IBAN = "AZ21NABZ00000000137010001944";
 	private PaymentRules rules = PaymentRules.getInstance();
 	private BasicDataSource dataSource;
 	private PaymentRequestRepository paymentRequestRepository;
@@ -82,7 +80,7 @@ public class PaymentRequestRepositoryTest {
 	@Test
 	public void givenPaymentRequestRepository_CallingInsertPaymentRequest_PassingModel_ShouldInsertTheModel()
 			throws ValidationException {
-		PaymentRequest req = buildPaymentDataStructure(LocalDate.of(2017, 1, 10), "AZ21NABZ00000000137010001944");
+		PaymentRequest req = buildPaymentDataStructure(LocalDate.of(2017, 1, 10), IBAN);
 		paymentRequestRepository.insertPaymentRequest(req);
 		PaymentRequest loaded = paymentRequestRepository.loadPaymentRequestById(4);
 		assertTrue(loaded.equals(loadPayment()));
@@ -105,31 +103,10 @@ public class PaymentRequestRepositoryTest {
 		assertEquals(2, paymentRequestRepository.loadPaymentRequests().size());
 	}
 
-	@Ignore
-	// TODO to useCases Test
-	@Test(expected = AccountRuleViolationException.class)
-	public void givenPaymentRequestRepository_CallingInsertPaymentRequest_PassingExistingAccountWithViolatedRule_ShouldThrowAccountRuleViolationException()
-			throws ValidationException {
-
-		PaymentRequest req = buildPaymentDataStructure(LocalDate.of(1994, 5, 10), "AZ21NABZ00000000137010001944");
-		paymentRequestRepository.insertPaymentRequest(req);
-
-	}
-
-	@Ignore
-	// TODO to useCases Tests
-	@Test(expected = AccountRuleViolationException.class)
-	public void givenPaymentRequestRepository_CallingInsertPaymentRequest_PassingPastDay_ShouldThrowAccountRuleViolationException()
-			throws ValidationException {
-		PaymentRequest req = buildPaymentDataStructure(LocalDate.of(2025, 1, 5), "AZ21NABZ00000000137010001944");
-		paymentRequestRepository.insertPaymentRequest(req);
-
-	}
-
 	@Test
 	public void givenPaymentRequestRepository_CallingInsertPaymentRequest_PaymentAmountShouldBeChequeWritten()
 			throws ValidationException {
-		PaymentRequest req = buildPaymentDataStructure(LocalDate.of(2017, 1, 10), "AZ21NABZ00000000137010001944");
+		PaymentRequest req = buildPaymentDataStructure(LocalDate.of(2017, 1, 10), IBAN);
 		ChequeAmountWriter chequeAmountWriter = new EnglishChequeAmountWriter();
 		req.setAmountInWords(chequeAmountWriter.writeAmountInWords(req.getPaymentAmount(), req.getCurrencyCode()));
 		paymentRequestRepository.insertPaymentRequest(req);
@@ -137,27 +114,16 @@ public class PaymentRequestRepositoryTest {
 	}
 
 	private PaymentRequest loadPayment() {
-		PaymentRequest loadedPayment = (PaymentRequest) paymentRequestRepository.loadPaymentRequestById(4);
-		return loadedPayment;
+		return (PaymentRequest) paymentRequestRepository.loadPaymentRequestById(4);
 	}
 
 	@Test
 	public void givenPaymentRequestRepository_CallingInsertPaymentRequest_PassingExistingAccountWithRule_ShouldBeInserted()
 			throws ValidationException {
-		PaymentRequest req = buildPaymentDataStructure(LocalDate.now(), "AZ21NABZ00000000137010001944");
+		PaymentRequest req = buildPaymentDataStructure(LocalDate.now(), IBAN);
 		paymentRequestRepository.insertPaymentRequest(req);
 		PaymentRequest loaded = paymentRequestRepository.loadPaymentRequestById(4);
 		assertTrue(loaded.equals(loadPayment()));
-
-	}
-
-	@Ignore
-	// TODO to useCases test
-	@Test(expected = InvalidIBANException.class)
-	public void givenPaymentRequestRepository_CallingInsertPaymentRequest_PassingInvalidIban_ShouldThrowInvalidIBANException()
-			throws ValidationException {
-		PaymentRequest req = buildPaymentDataStructure(LocalDate.now(), "AZ21NA37010001944");
-		paymentRequestRepository.insertPaymentRequest(req);
 
 	}
 

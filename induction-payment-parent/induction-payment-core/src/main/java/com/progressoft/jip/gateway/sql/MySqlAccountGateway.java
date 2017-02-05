@@ -1,4 +1,4 @@
-package com.progressoft.jip.gateways.sql.impl;
+package com.progressoft.jip.gateway.sql;
 
 import java.util.Collection;
 
@@ -23,6 +23,7 @@ public class MySqlAccountGateway extends AbstractGateway implements AccountGatew
 		this.loadAccounts = factory.loadAccounts();
 		this.updateAccount = factory.updateAccount();
 		this.createAccount = factory.createAccount();
+
 	}
 
 	@Override

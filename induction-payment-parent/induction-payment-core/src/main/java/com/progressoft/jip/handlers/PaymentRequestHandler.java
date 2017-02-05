@@ -20,8 +20,8 @@ public interface PaymentRequestHandler {
 	public void fillAmountInWords(PaymentRequest paymentRequest, AbstractAmountWriter abstractAmountWriter,
 			String writerKey);
 
+
 	public void setPaymentRequestStatus(PaymentRequest paymentRequest, String paymentStatus);
 
 	void setSubmissionState(PaymentRequest paymentRequest, String submissionState);
-
 }
