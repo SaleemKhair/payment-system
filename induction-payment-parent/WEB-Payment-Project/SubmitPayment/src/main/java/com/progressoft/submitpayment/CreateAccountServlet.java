@@ -35,7 +35,7 @@ public class CreateAccountServlet extends HttpServlet {
 
 	@Override
 	public void init() throws ServletException {
-		context = new AppContextJPA();
+		context = AppContextJPA.getContext();
 		accountUseCases = context.getAccountUseCases();
 		currencyUseCases = context.getCurrencyUseCases();
 	}

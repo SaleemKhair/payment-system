@@ -46,7 +46,8 @@ public class PaymentRequestUseCasesImpl implements PaymentRequestUseCases {
 		Account orderingAccount = accountRepository.loadAccountByIban(paymentRequest.getOrderingAccountIban());
 		paymentRequestHandler.validatePaymentRequest(paymentRequest, orderingAccount);
 		paymentRequestHandler.fillAmountInWords(paymentRequest, amountWriter, writerKey);
-		paymentRequestHandler.setPaymentRequestStatus(paymentRequest);
+		paymentRequestHandler.setPaymentRequestStatus(paymentRequest, "created");
+
 		paymentRequestRepository.insertPaymentRequest(paymentRequest);
 	}
 
@@ -90,7 +91,8 @@ public class PaymentRequestUseCasesImpl implements PaymentRequestUseCases {
 
 	@Override
 	public void executePayment(PaymentRequestView paymentRequest) {
-		// TODO for manual submission: approval or rejection of payment request
+		// TODO if submit was manual nothing to do yet
+
 	}
 
 	@Override

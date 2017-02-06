@@ -5,7 +5,8 @@ target/
 Servers/
 local.properties
 .settings/
-/.sonar/
+.sonar/
+.idea/
 .sonarlint/
 RemoteSystemsTempFiles/
 .loadpath
@@ -32,4 +33,3 @@ RemoteSystemsTempFiles/
 *.jar
 *.war
 *.ear
-

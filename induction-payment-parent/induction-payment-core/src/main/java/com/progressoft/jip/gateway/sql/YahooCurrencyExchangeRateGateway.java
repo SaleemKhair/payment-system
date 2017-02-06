@@ -4,7 +4,6 @@ import java.util.Objects;
 
 import com.progressoft.jip.datastructures.CurrencyExchangeRate;
 import com.progressoft.jip.gateway.AbstractRestfullGateway;
-import com.progressoft.jip.gateway.CurrencyExchangeRateGateway;
 import com.progressoft.jip.gateways.exceptions.CurrencyCodeNotFoundException;
 import com.progressoft.jip.gateways.exceptions.InvalidRestfulResponseFormatException;
 import com.progressoft.jip.gateways.exceptions.NullRestfulParserException;
@@ -16,7 +15,7 @@ import com.progressoft.jip.utilities.restful.impl.YahooXmlResponse;
 
 
 public class YahooCurrencyExchangeRateGateway extends AbstractRestfullGateway<YahooXmlResponse>
-		implements CurrencyExchangeRateGateway {
+		 {
 
 	private static final String YAHOO_SERVER = "http://query.yahooapis.com/v1/public/yql?q=";
 	private static final String YAHOO_QUERY = "select * from yahoo.finance.xchange where pair in";
@@ -33,8 +32,9 @@ public class YahooCurrencyExchangeRateGateway extends AbstractRestfullGateway<Ya
 
 	@Override
 	public CurrencyExchangeRate loadCurrencyExchangeRate(String codeFrom, String codeTo) {
-		if (!isValidCode(codeFrom) || !isValidCode(codeTo))
-			throw new CurrencyCodeNotFoundException();
+		if (!isValidCode(codeFrom) || !isValidCode(codeTo)){
+			System.out.println(codeFrom +" " + codeTo);
+			throw new CurrencyCodeNotFoundException();}
 		YahooXmlResponse response = super.response(url(codeFrom, codeTo));
 		if (!isValidResponse(response))
 			throw new CurrencyCodeNotFoundException();

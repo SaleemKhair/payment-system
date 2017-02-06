@@ -6,8 +6,8 @@ import javax.sql.DataSource;
 
 import com.progressoft.jip.behaviors.AccountGatewayDBBehaviorsFactory;
 import com.progressoft.jip.behaviors.Behavior;
-import com.progressoft.jip.gateway.AbstractGateway;
-import com.progressoft.jip.gateway.AccountGateway;
+import com.progressoft.jip.gateways.AccountGateway;
+import com.progressoft.jip.gateways.sql.AbstractGateway;
 import com.progressoft.jip.gateways.views.AccountView;
 
 public class MySqlAccountGateway extends AbstractGateway implements AccountGateway {

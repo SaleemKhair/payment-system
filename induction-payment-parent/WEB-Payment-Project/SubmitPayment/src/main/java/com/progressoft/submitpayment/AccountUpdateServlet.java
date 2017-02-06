@@ -25,7 +25,7 @@ public class AccountUpdateServlet extends HttpServlet {
 
 	@Override
 	public void init() throws ServletException {
-		context = new AppContextJPA();
+		context = AppContextJPA.getContext();
 	}
 
 	@Override

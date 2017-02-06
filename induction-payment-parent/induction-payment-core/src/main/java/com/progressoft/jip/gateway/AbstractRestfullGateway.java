@@ -7,7 +7,7 @@ import java.net.URL;
 
 import com.progressoft.jip.utilities.restful.RestfulDataParser;
 
-public abstract class AbstractRestfullGateway<T> {
+public abstract class AbstractRestfullGateway<T>  implements CurrencyExchangeRateGateway{
 
 	private RestfulDataParser<T> parser;
 
