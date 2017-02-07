@@ -20,18 +20,18 @@ import com.progressoft.jip.usecases.CurrencyUseCases;
 
 @WebServlet(urlPatterns = "/createAccount")
 public class CreateAccountServlet extends HttpServlet {
-
-	private static final String RULES = "rules";
-
-	private static final String PAGE_CONTENT = "pageContent";
-
-	private static final String CURRENCIES = "currencies";
-
 	private static final long serialVersionUID = 1L;
 
-	private AppContext context;
-	private AccountUseCases accountUseCases;
+	private static final String CREATE_ACCOUNT_PAGE = "/WEB-INF/views/createAccount.jsp";
+	private static final String CREATE_ACCOUNT_WAR = "/web-war/createAccount";
+	private static final String BASE_JSP_PAGE = "/WEB-INF/views/base.jsp";
+	private static final String PAGE_CONTENT = "pageContent";
+	private static final String CURRENCIES = "currencies";
+	private static final String RULES = "rules";
+
 	private CurrencyUseCases currencyUseCases;
+	private AccountUseCases accountUseCases;
+	private AppContext context;
 
 	@Override
 	public void init() throws ServletException {
@@ -44,8 +44,8 @@ public class CreateAccountServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		req.setAttribute(RULES, context.getPaymentRuleNames());
 		req.setAttribute(CURRENCIES, currencyUseCases.getAllCurrencies());
-		req.setAttribute(PAGE_CONTENT, "/WEB-INF/views/createAccount.jsp");
-		req.getRequestDispatcher("/WEB-INF/views/base.jsp").forward(req, resp);
+		req.setAttribute(PAGE_CONTENT, CREATE_ACCOUNT_PAGE);
+		req.getRequestDispatcher(BASE_JSP_PAGE).forward(req, resp);
 	}
 
 	@Override
@@ -54,9 +54,9 @@ public class CreateAccountServlet extends HttpServlet {
 			Account account = new Account();
 			BeanUtils.populate(account, req.getParameterMap());
 			accountUseCases.createAccount(account);
-			resp.sendRedirect("/web-war/createAccount");
+			resp.sendRedirect(CREATE_ACCOUNT_WAR);
 		} catch (IllegalAccessException | InvocationTargetException | ValidationException e) {
-			throw new ServletException(e);
+			throw new IllegalStateException(e);
 		}
 
 	}

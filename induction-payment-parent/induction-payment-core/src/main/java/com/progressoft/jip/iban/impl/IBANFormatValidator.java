@@ -47,7 +47,7 @@ public class IBANFormatValidator implements IBANValidator {
 	private void getAndReplaceMatch(StringBuilder regex, Matcher numberMatcher) {
 		String number = numberMatcher.group(NUMBER_GROUP);
 		String type = numberMatcher.group(TYPE_GROUP);
-		numberMatcher.appendReplacement(new StringBuffer(regex.toString()), getReplacement(number, type));
+		numberMatcher.appendReplacement(new StringBuffer(regex), getReplacement(number, type));
 	}
 
 	private String getReplacement(String number, String type) {

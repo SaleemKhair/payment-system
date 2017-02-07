@@ -16,6 +16,7 @@ import com.progressoft.jip.gateways.jpa.converters.EntityToBeanConverter;
 import com.progressoft.jip.gateways.jpa.converters.impl.BeanToEntityConverterImpl;
 import com.progressoft.jip.gateways.jpa.converters.impl.EntityToBeanConvertorImpl;
 import com.progressoft.jip.handlers.AccountHandler;
+import com.progressoft.jip.handlers.PaymentImportHandler;
 import com.progressoft.jip.handlers.PaymentPurposeHandler;
 import com.progressoft.jip.handlers.PaymentRequestHandler;
 import com.progressoft.jip.handlers.exceptions.PurposeValidationException;
@@ -23,11 +24,14 @@ import com.progressoft.jip.handlers.exceptions.ValidationException;
 import com.progressoft.jip.handlers.impl.AccountHandlerImpl;
 import com.progressoft.jip.handlers.impl.PaymentPurposeHandlerImpl;
 import com.progressoft.jip.handlers.impl.PaymentRequestHandlerImpl;
+import com.progressoft.jip.handlers.impl.XmlPaymentImportHandler;
 import com.progressoft.jip.handlers.validators.Validator;
 import com.progressoft.jip.handlers.validators.impl.AccountValidator;
 import com.progressoft.jip.handlers.validators.impl.PaymentPurposeValidator;
 import com.progressoft.jip.handlers.validators.impl.PaymentRequestValidator;
 import com.progressoft.jip.iban.IBANGeneralValidator;
+import com.progressoft.jip.importer.PaymentImporter;
+import com.progressoft.jip.importer.impl.PaymentImporterImpl;
 import com.progressoft.jip.jobwatcher.JobWatcher;
 import com.progressoft.jip.jparepositories.AccountJpaRepository;
 import com.progressoft.jip.jparepositories.CurrencyJpaRepository;
@@ -81,6 +85,8 @@ public class AppContextJPA implements AppContext {
 	private final AccountHandler accountHandler;
 	private final PaymentPurposeHandler paymentPurposeHandler;
 	private final PaymentRequestHandler paymentRequestHandler;
+	private final PaymentImporter importer;
+	private final PaymentImportHandler importHandler;
 
 	private final PaymentPurposeJpaRepository paymentPurposeJpaRepository;
 	private final PaymentRequestJpaRepository paymentRequestJpaRepository;
@@ -144,6 +150,10 @@ public class AppContextJPA implements AppContext {
 		paymentPurposeUseCases = new PaymentPurposeUseCasesImpl(paymentPurposeRepository, paymentPurposeHandler);
 		paymentRequestUseCases = new PaymentRequestUseCasesImpl(paymentRequestHandler, accountRepository,
 				paymentRequestRepository, new ReportProvider(paymentRequestRepository));
+
+		importer = new PaymentImporterImpl();
+		importHandler = new XmlPaymentImportHandler(paymentRequestUseCases, amountWriter, "EnglishWriter");
+
 		jobWatcher = new JobWatcher(paymentRequestHandler, accountRepository, paymentRequestRepository, accountHandler);
 		jobWatcher.startCronJobSchedule();
 	}
@@ -185,6 +195,16 @@ public class AppContextJPA implements AppContext {
 	@Override
 	public AbstractAmountWriter getAbstractAmountWriter() {
 		return amountWriter;
+	}
+
+	@Override
+	public PaymentImporter getImporter() {
+		return importer;
+	}
+
+	@Override
+	public PaymentImportHandler getImportHandler() {
+		return importHandler;
 	}
 
 }

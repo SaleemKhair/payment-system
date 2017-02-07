@@ -48,7 +48,7 @@ public class LoginServlet extends HttpServlet {
 		String password = req.getParameter("password");
 		String address = req.getRemoteAddr();
 
-		return new AuthenticateRequest() {
+		AuthenticateRequest authenticateRequest = new AuthenticateRequest() {
 
 			@Override
 			public String getUsername() {
@@ -65,5 +65,6 @@ public class LoginServlet extends HttpServlet {
 				return address;
 			}
 		};
+		return authenticateRequest;
 	}
 }
