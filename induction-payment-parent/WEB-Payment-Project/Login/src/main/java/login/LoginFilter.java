@@ -43,10 +43,7 @@ public class LoginFilter implements Filter {
 			httpResp.sendRedirect(httpReq.getContextPath() + "/login");
 			return;
 		}
-		// proceed
 		chain.doFilter(request, response);
-		//
-
 	}
 
 	private boolean isURLExcluded(HttpServletRequest httpReq) {

@@ -5,6 +5,7 @@ import javax.persistence.EntityManager;
 public class AbstractRepository {
 
 	private EntityManager entityManager;
+	private Object monitor = new Object();
 
 	public AbstractRepository(EntityManager entityManager) {
 		this.entityManager = entityManager;
@@ -20,7 +21,7 @@ public class AbstractRepository {
 			isCommitted = true;
 			return (T) obj;
 		} finally {
-			if (!isCommitted) {
+			if (!isCommitted && entityManager.getTransaction().isActive()) {
 				entityManager.getTransaction().rollback();
 			}
 		}

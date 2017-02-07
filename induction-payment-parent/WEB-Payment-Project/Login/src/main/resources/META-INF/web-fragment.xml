@@ -7,7 +7,7 @@
 	<name>Login</name>
 	<servlet>
 		<servlet-name>LoginServlet</servlet-name>
-		<servlet-class>loginImpl.LoginServlet</servlet-class>
+		<servlet-class>login.impl.LoginServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>LoginServlet</servlet-name>
@@ -15,7 +15,7 @@
 	</servlet-mapping>
 	<servlet>
 		<servlet-name>LogoutServlet</servlet-name>
-		<servlet-class>loginImpl.LogoutServlet</servlet-class>
+		<servlet-class>login.impl.LogoutServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>LogoutServlet</servlet-name>

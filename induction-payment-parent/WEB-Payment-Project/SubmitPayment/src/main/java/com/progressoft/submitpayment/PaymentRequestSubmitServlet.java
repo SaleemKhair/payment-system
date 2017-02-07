@@ -21,8 +21,16 @@ import com.progressoft.jip.usecases.PaymentRequestUseCases;
 import com.progressoft.jip.utilities.chequewriting.impl.AbstractAmountWriter;
 
 public class PaymentRequestSubmitServlet extends HttpServlet {
-
 	private static final long serialVersionUID = 1L;
+
+	private static final String SUBMIT_PAYMENT_REQUEST_PAGE_WAR = "/web-war/submitpaymentrequest";
+	private static final String CREATE_PAYMENT_REQUEST_PAGE = "/WEB-INF/views/createPayment.jsp";
+	private static final String BASE_JSP_PAGE = "/WEB-INF/views/base.jsp";
+	private static final String PAYMENT_PURPOSES = "paymentPurposes";
+	private static final String PAGE_CONTENT = "pageContent";
+	private static final String CURRENCIES = "currencies";
+	private static final String CHECK_LANG = "checkLang";
+	private static final String ACCOUNTS = "accounts";
 
 	private PaymentRequestUseCases paymentRequestUseCases;
 	private PaymentPurposeUseCases paymentPurposeUseCases;
@@ -32,7 +40,7 @@ public class PaymentRequestSubmitServlet extends HttpServlet {
 
 	@Override
 	public void init() throws ServletException {
-		AppContext context =  AppContextJPA.getContext();
+		AppContext context = AppContextJPA.getContext();
 		paymentRequestUseCases = context.getPaymentRequestUseCases();
 		paymentPurposeUseCases = context.getPaymentPurposeUseCases();
 		accountUseCases = context.getAccountUseCases();
@@ -42,22 +50,25 @@ public class PaymentRequestSubmitServlet extends HttpServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		req.setAttribute("paymentPurposes", paymentPurposeUseCases.getAllPaymentPurposes());
-		req.setAttribute("currencies", currencyUseCases.getAllCurrencies());
-		req.setAttribute("accounts", accountUseCases.getAllAccounts());
-		req.setAttribute("checkLang", amountWriter.getWritersNames());
 
-		req.setAttribute("pageContent", "/WEB-INF/views/createPayment.jsp");
-		req.getRequestDispatcher("/WEB-INF/views/base.jsp").forward(req, resp);
+		req.setAttribute("orderingAccountIban", req.getSession().getAttribute("PaymentIban"));
+		req.setAttribute(PAYMENT_PURPOSES, paymentPurposeUseCases.getAllPaymentPurposes());
+		req.setAttribute(CURRENCIES, currencyUseCases.getAllCurrencies());
+		req.setAttribute(ACCOUNTS, accountUseCases.getAllAccounts());
+		req.setAttribute(CHECK_LANG, amountWriter.getWritersNames());
+
+		req.setAttribute(PAGE_CONTENT, CREATE_PAYMENT_REQUEST_PAGE);
+		req.getRequestDispatcher(BASE_JSP_PAGE).forward(req, resp);
 	}
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
 		try {
 			PaymentRequest paymentRequest = new PaymentRequest();
 			BeanUtils.populate(paymentRequest, req.getParameterMap());
-			paymentRequestUseCases.createPaymentRequest(paymentRequest, amountWriter, req.getParameter("checkLang"));
-			resp.sendRedirect("/web-war/submitpaymentrequest");
+			paymentRequestUseCases.createPaymentRequest(paymentRequest, amountWriter, req.getParameter(CHECK_LANG));
+			resp.sendRedirect(SUBMIT_PAYMENT_REQUEST_PAGE_WAR);
 		} catch (IllegalAccessException | InvocationTargetException | ValidationException e) {
 			throw new ServletException(e);
 		}
