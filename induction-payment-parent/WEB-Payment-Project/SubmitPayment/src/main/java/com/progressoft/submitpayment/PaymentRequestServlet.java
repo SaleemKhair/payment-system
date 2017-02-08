@@ -78,22 +78,23 @@ public class PaymentRequestServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String formatType = req.getParameter(ACTION);
-		Part fileUploaded = req.getPart(FILE_UPLOAD);
-		if (Objects.nonNull(fileUploaded)) {
-			InputStream stream = fileUploaded.getInputStream();
-			try {
-				paymentRequestUseCases.importPayemntsRequests(stream, context.getImportHandler(),
-						context.getImporter());
-				String paymentImportReport = paymentRequestUseCases
-						.generatePaymentImportReport(context.getImportHandler());
-				resp.setContentType(TEXT_XML);
-				resp.setHeader(CONTENT_DISPOSITION, ATTACHMENT_FILENAME + LocalDateTime.now() + IMPORT_REPORT_XML);
-				buildResponseContent(resp, paymentImportReport);
-			} catch (ParseException e) {
-				throw new IllegalStateException(e);
+		if (Objects.isNull(formatType)) {
+			Part fileUploaded = req.getPart(FILE_UPLOAD);
+			if (Objects.nonNull(fileUploaded)) {
+				InputStream stream = fileUploaded.getInputStream();
+				try {
+					paymentRequestUseCases.importPayemntsRequests(stream, context.getImportHandler(),
+							context.getImporter());
+					String paymentImportReport = paymentRequestUseCases
+							.generatePaymentImportReport(context.getImportHandler());
+					resp.setContentType(TEXT_XML);
+					resp.setHeader(CONTENT_DISPOSITION, ATTACHMENT_FILENAME + LocalDateTime.now() + IMPORT_REPORT_XML);
+					buildResponseContent(resp, paymentImportReport);
+				} catch (ParseException e) {
+					throw new IllegalStateException(e);
+				}
 			}
 		}
-
 		if (Objects.nonNull(selectedIban)) {
 			try {
 				String generateReport = paymentRequestUseCases.generateReport(selectedIban, formatType);

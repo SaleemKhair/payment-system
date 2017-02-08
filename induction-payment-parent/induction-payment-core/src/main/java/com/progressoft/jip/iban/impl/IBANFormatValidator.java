@@ -33,21 +33,21 @@ public class IBANFormatValidator implements IBANValidator {
 	}
 
 	private String generateRegEx(String format) {
-		StringBuilder regex = new StringBuilder();
+		StringBuffer regex = new StringBuffer();
 		compileFormatPattern(format, regex);
 		return regex.toString();
 	}
 
-	private void compileFormatPattern(String format, StringBuilder regex) {
+	private void compileFormatPattern(String format, StringBuffer regex) {
 		Matcher numberMatcher = Pattern.compile(FORMAT_REGEX).matcher(format);
 		while (numberMatcher.find())
 			getAndReplaceMatch(regex, numberMatcher);
 	}
 
-	private void getAndReplaceMatch(StringBuilder regex, Matcher numberMatcher) {
+	private void getAndReplaceMatch(StringBuffer regex, Matcher numberMatcher) {
 		String number = numberMatcher.group(NUMBER_GROUP);
 		String type = numberMatcher.group(TYPE_GROUP);
-		numberMatcher.appendReplacement(new StringBuffer(regex), getReplacement(number, type));
+		numberMatcher.appendReplacement(regex, getReplacement(number, type));
 	}
 
 	private String getReplacement(String number, String type) {

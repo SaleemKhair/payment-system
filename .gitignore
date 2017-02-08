@@ -1,9 +1,10 @@
-.metadata
+.metadata/
 bin/
 tmp/
 target/
 Servers/
 local.properties
+sonar-project.properties
 .settings/
 .sonar/
 .idea/

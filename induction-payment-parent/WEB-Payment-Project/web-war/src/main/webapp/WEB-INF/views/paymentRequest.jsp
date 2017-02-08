@@ -113,9 +113,8 @@ keyframes blur {from { text-shadow:0px0px10px#fff, 0px0px10px#31708f,
 		<div class="form-group">
 			<label class="col-md-4 control-label"></label>
 			<div class="col-md-4">
-				<a
-					href='<c:url value="./submitpaymentrequest"/>'
-					type="submit" class="btn btn-success">Submit payment <span
+				<a href='<c:url value="./submitpaymentrequest"/>' type="submit"
+					class="btn btn-success">Submit payment <span
 					class="glyphicon glyphicon-send"></span></a>
 			</div>
 		</div>
@@ -132,7 +131,7 @@ keyframes blur {from { text-shadow:0px0px10px#fff, 0px0px10px#31708f,
 		<div class="alert alert-info" role="alert" id="success_message">
 			<strong class="area"> Note <i
 				class="glyphicon glyphicon-edit"></i>
-			</strong> Do You wan't upload Payment Request , as CSV file please <a
+			</strong> Do You want to upload Payment Request , as CSV file please <a
 				id="UploadFile" href="#" onclick="myFunction()"> <i> Click
 					Here </i></a> .
 		</div>
@@ -201,8 +200,7 @@ keyframes blur {from { text-shadow:0px0px10px#fff, 0px0px10px#31708f,
 						</table>
 					</div>
 					<div>
-						<form action="./paymentRequest" method="post"
-							enctype="multipart/form-data">
+						<form action="./paymentRequest" method="post">
 							<div class="btn-group" style="float: right; margin: 35px">
 								<button type="button" class="btn btn-info dropdown-toggle "
 									data-toggle="dropdown" aria-haspopup="true"
