@@ -11,18 +11,18 @@ public class MemoryAuthenticationManager implements AuthenticationManager {
 
 	private Map<String, Credentials> credentials = new HashMap<>();
 
-	public MemoryAuthenticationManager() {
-		Credentials admin = new Credentials();
-		admin.username = "admin";
-		admin.fullName = "Administrator";
-		admin.password = "pass1234";
-		credentials.put("admin", admin);
+	{
+		Credentials user = new Credentials();
+		user.username = "admin";
+		user.fullName = "Administrator";
+		user.password = "pass1234";
+		credentials.put("admin", user);
 
-		Credentials manager = new Credentials();
-		manager.username = "manager";
-		manager.fullName = "System Manager";
-		manager.password = "pass1234";
-		credentials.put("manager", manager);
+		user = new Credentials();
+		user.username = "manager";
+		user.fullName = "System Manager";
+		user.password = "pass1234";
+		credentials.put("manager", user);
 	}
 
 	@Override

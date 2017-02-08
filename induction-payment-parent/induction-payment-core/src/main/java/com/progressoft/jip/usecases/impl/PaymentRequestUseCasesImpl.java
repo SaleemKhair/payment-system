@@ -1,10 +1,12 @@
 package com.progressoft.jip.usecases.impl;
 
 import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.io.PrintStream;
 import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.sql.Date;
+import java.text.ParseException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -13,8 +15,10 @@ import java.util.List;
 import com.progressoft.jip.beans.Account;
 import com.progressoft.jip.beans.PaymentRequest;
 import com.progressoft.jip.gateways.views.PaymentRequestView;
+import com.progressoft.jip.handlers.PaymentImportHandler;
 import com.progressoft.jip.handlers.PaymentRequestHandler;
 import com.progressoft.jip.handlers.exceptions.ValidationException;
+import com.progressoft.jip.importer.PaymentImporter;
 import com.progressoft.jip.report.ReportProvider;
 import com.progressoft.jip.report.impl.CSVReportWriter;
 import com.progressoft.jip.report.impl.XMLReportWriter;
@@ -111,6 +115,17 @@ public class PaymentRequestUseCasesImpl implements PaymentRequestUseCases {
 
 		return new String(baos.toByteArray(), StandardCharsets.UTF_8);
 
+	}
+
+	@Override
+	public void importPayemntsRequests(InputStream stream, PaymentImportHandler handler,
+			PaymentImporter paymentImporter) throws ParseException {
+		paymentImporter.parse(stream, handler);
+	}
+
+	@Override
+	public String generatePaymentImportReport(PaymentImportHandler handler) {
+		return handler.displayReport();
 	}
 
 }

@@ -2,6 +2,8 @@ package com.progressoft.jip.context;
 
 import java.util.List;
 
+import com.progressoft.jip.handlers.PaymentImportHandler;
+import com.progressoft.jip.importer.PaymentImporter;
 import com.progressoft.jip.usecases.AccountUseCases;
 import com.progressoft.jip.usecases.CurrencyUseCases;
 import com.progressoft.jip.usecases.PaymentPurposeUseCases;
@@ -21,5 +23,9 @@ public interface AppContext {
 	List<String> getPaymentRuleNames();
 
 	AbstractAmountWriter getAbstractAmountWriter();
+
+	PaymentImporter getImporter();
+
+	PaymentImportHandler getImportHandler();
 
 }
